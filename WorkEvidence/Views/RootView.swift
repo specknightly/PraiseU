@@ -33,6 +33,11 @@ struct RootView: View {
     @State private var ingestionStatus: String?
     @State private var showingInsights = false
     @State private var showingRequestIntelligence = false
+    @State private var showingLargeExportWarning = false
+    @State private var pendingLargeExportBytes: Int64 = 0
+    @State private var mailScanTask: Task<Void, Never>?
+    @State private var mailEnrichmentProgress: (done: Int, total: Int)?
+    @State private var isMailScanActive = false
     @AppStorage("autoScanEvidenceInbox") private var autoScanEvidenceInbox = true
     @AppStorage("appleMailIntegrationEnabled") private var appleMailIntegrationEnabled = false
     @AppStorage("appleMailAccountName") private var appleMailAccountName = ""
@@ -123,17 +128,17 @@ struct RootView: View {
                 Menu {
                     Button("Export \(currentYear) Review Packet…", action: exportCurrentYear)
                     Button("Generate AI Brag Document…") { Task { await generateBragDocument() } }
-                        .disabled(isGeneratingBragDocument)
+                        .disabled(isGeneratingBragDocument || !AppleIntelligenceEnrichmentService.availability.isAvailable)
                     Button("Generate Professional Value Model…") { Task { await generateProfessionalValueModel() } }
-                        .disabled(isGeneratingValueModel)
+                        .disabled(isGeneratingValueModel || !AppleIntelligenceEnrichmentService.availability.isAvailable)
                     Divider()
                     Button("Scan Evidence Inbox Now") {
                         scanEvidenceInbox()
                     }
                     Button("Scan Apple Mail Now") {
-                        Task { await scanAppleMail(silentWhenEmpty: false) }
+                        mailScanTask = Task { await scanAppleMail(silentWhenEmpty: false) }
                     }
-                    .disabled(!appleMailIntegrationEnabled || appleMailAccountName.isEmpty || appleMailMailboxPath.isEmpty)
+                    .disabled(!appleMailIntegrationEnabled || appleMailAccountName.isEmpty || appleMailMailboxPath.isEmpty || isMailScanActive)
                     Button("Reveal Evidence Inbox in Finder") {
                         IngestionService.revealInbox()
                     }
@@ -145,7 +150,7 @@ struct RootView: View {
         .onReceive(NotificationCenter.default.publisher(for: .newAccomplishment)) { _ in addEntry() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             if autoScanEvidenceInbox { scanEvidenceInbox(silentWhenEmpty: true) }
-            if appleMailIntegrationEnabled && appleMailCreateDraftsAutomatically { Task { await scanAppleMail(silentWhenEmpty: true) } }
+            if appleMailIntegrationEnabled && appleMailCreateDraftsAutomatically { mailScanTask = Task { await scanAppleMail(silentWhenEmpty: true) } }
             if requestMailIntegrationEnabled { Task { await scanRequestMail(silentWhenEmpty: true) } }
         }
 
@@ -155,7 +160,7 @@ struct RootView: View {
                 let seconds = max(300.0, appleMailScanIntervalMinutes * 60.0)
                 try? await Task.sleep(for: .seconds(seconds))
                 guard !Task.isCancelled else { return }
-                await scanAppleMail(silentWhenEmpty: true)
+                mailScanTask = Task { await scanAppleMail(silentWhenEmpty: true) }
             }
         }
         .task(id: "request-\(requestMailIntegrationEnabled)-\(requestMailScanIntervalMinutes)-\(requestMailAccountName)-\(requestMailMailboxPath)-\(requestMailAutoAnalyze)") {
@@ -192,6 +197,36 @@ struct RootView: View {
             Button("OK", role: .cancel) { exportError = nil }
         } message: {
             Text(exportError ?? "Unknown export error")
+        }
+        .confirmationDialog(
+            "Large Export",
+            isPresented: $showingLargeExportWarning,
+            titleVisibility: .visible
+        ) {
+            Button("Export Anyway") {
+                let yearEntries = entries.filter { Calendar.current.component(.year, from: $0.date) == currentYear }
+                performExportCurrentYear(yearEntries)
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This export will embed about \(ByteCountFormatter.string(fromByteCount: pendingLargeExportBytes, countStyle: .file)) of evidence files and may be slow to open. Files over 20 MB are not embedded.")
+        }
+        .safeAreaInset(edge: .bottom) {
+            if let progress = mailEnrichmentProgress {
+                HStack(spacing: 12) {
+                    ProgressView(value: Double(progress.done), total: Double(max(progress.total, 1)))
+                        .frame(maxWidth: 220)
+                    Text("Analyzing mail evidence \(progress.done)/\(progress.total)…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Cancel") { mailScanTask?.cancel() }
+                        .buttonStyle(.borderless)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.bar)
+            }
         }
     }
 
@@ -389,6 +424,9 @@ struct RootView: View {
     @MainActor
     private func scanAppleMail(silentWhenEmpty: Bool) async {
         guard appleMailIntegrationEnabled, !appleMailAccountName.isEmpty, !appleMailMailboxPath.isEmpty else { return }
+        guard !isMailScanActive else { return }
+        isMailScanActive = true
+        defer { isMailScanActive = false; mailEnrichmentProgress = nil }
         do {
             let imported = try AppleMailIntegrationService.importNewMessages(
                 accountName: appleMailAccountName,
@@ -397,7 +435,9 @@ struct RootView: View {
             )
 
             if appleMailAutoAnalyze, AppleIntelligenceEnrichmentService.availability.isAvailable {
-                for entry in imported {
+                for (index, entry) in imported.enumerated() {
+                    guard !Task.isCancelled else { break }
+                    mailEnrichmentProgress = (done: index, total: imported.count)
                     let enrichmentInput = AccomplishmentEnrichmentInput(
                         title: entry.title,
                         category: entry.category.rawValue,
@@ -439,6 +479,7 @@ struct RootView: View {
                     }
                     entry.updatedAt = .now
                     try? modelContext.save()
+                    mailEnrichmentProgress = (done: index + 1, total: imported.count)
                 }
             }
 
@@ -518,6 +559,16 @@ struct RootView: View {
 
     private func exportCurrentYear() {
         let yearEntries = entries.filter { Calendar.current.component(.year, from: $0.date) == currentYear }
+        let totalEvidenceBytes = yearEntries.reduce(Int64(0)) { $0 + $1.attachments.reduce(Int64(0)) { $0 + $1.byteCount } }
+        if totalEvidenceBytes > ExportService.recommendedExportWarningBytes {
+            pendingLargeExportBytes = totalEvidenceBytes
+            showingLargeExportWarning = true
+            return
+        }
+        performExportCurrentYear(yearEntries)
+    }
+
+    private func performExportCurrentYear(_ yearEntries: [Accomplishment]) {
         let html = ExportService.annualReviewHTML(entries: yearEntries, year: currentYear)
 
         let panel = NSSavePanel()

@@ -137,14 +137,28 @@ enum RequestIntelligenceService {
         return blocks.joined(separator: "\n---\n")
     }
 
-    private static func parse(_ text: String) -> RequestIntelligenceResult {
+    /// Finds a heading even when the model wraps it in markdown decoration (`**HEADING**`, `### HEADING`, `HEADING:`),
+    /// since the on-device model is not guaranteed to reproduce the exact plain-text heading requested in the prompt.
+    static func findHeadingRange(_ heading: String, in text: String, from start: String.Index) -> Range<String.Index>? {
+        let variants = [heading, "**\(heading)**", "**\(heading):**", "### \(heading)", "## \(heading)", "# \(heading)", "\(heading):"]
+        var best: Range<String.Index>?
+        for variant in variants {
+            guard let range = text.range(of: variant, options: [.caseInsensitive], range: start..<text.endIndex) else { continue }
+            if best == nil || range.lowerBound < best!.lowerBound {
+                best = range
+            }
+        }
+        return best
+    }
+
+    static func parse(_ text: String) -> RequestIntelligenceResult {
         func section(_ heading: String, next: String?) -> String {
-            guard let startRange = text.range(of: heading, options: [.caseInsensitive]) else { return "" }
-            let start = startRange.upperBound
+            guard let headingRange = findHeadingRange(heading, in: text, from: text.startIndex) else { return "" }
+            let start = headingRange.upperBound
             let end: String.Index
-            if let next, let nextRange = text.range(of: next, options: [.caseInsensitive], range: start..<text.endIndex) { end = nextRange.lowerBound }
+            if let next, let nextRange = findHeadingRange(next, in: text, from: start) { end = nextRange.lowerBound }
             else { end = text.endIndex }
-            return text[start..<end].trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: ":")))
+            return text[start..<end].trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: ":*#")))
         }
         let digest = section("DIGEST", next: "CONTEXT")
         let context = section("CONTEXT", next: "PRIORITY")

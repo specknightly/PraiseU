@@ -23,6 +23,11 @@
 		A10000000000000000000011 /* RequestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* RequestItem.swift */; };
 		A10000000000000000000012 /* RequestIntelligenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* RequestIntelligenceService.swift */; };
 		A10000000000000000000013 /* RequestIntelligenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* RequestIntelligenceView.swift */; };
+		B10000000000000000000001 /* AccomplishmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000001 /* AccomplishmentTests.swift */; };
+		B10000000000000000000002 /* RequestIntelligenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000002 /* RequestIntelligenceServiceTests.swift */; };
+		B10000000000000000000003 /* EvidenceIntelligenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000003 /* EvidenceIntelligenceServiceTests.swift */; };
+		B10000000000000000000004 /* ExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000004 /* ExportServiceTests.swift */; };
+		B10000000000000000000005 /* AttachmentStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000005 /* AttachmentStoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,10 +50,17 @@
 		A20000000000000000000012 /* RequestIntelligenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIntelligenceService.swift; sourceTree = "<group>"; };
 		A20000000000000000000013 /* RequestIntelligenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIntelligenceView.swift; sourceTree = "<group>"; };
 		A2000000000000000000000B /* WorkEvidence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkEvidence.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B20000000000000000000001 /* AccomplishmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccomplishmentTests.swift; sourceTree = "<group>"; };
+		B20000000000000000000002 /* RequestIntelligenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIntelligenceServiceTests.swift; sourceTree = "<group>"; };
+		B20000000000000000000003 /* EvidenceIntelligenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceIntelligenceServiceTests.swift; sourceTree = "<group>"; };
+		B20000000000000000000004 /* ExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportServiceTests.swift; sourceTree = "<group>"; };
+		B20000000000000000000005 /* AttachmentStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentStoreTests.swift; sourceTree = "<group>"; };
+		B20000000000000000000006 /* WorkEvidenceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WorkEvidenceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A30000000000000000000001 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		B50000000000000000000002 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -56,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				A40000000000000000000002 /* WorkEvidence */,
+				B30000000000000000000001 /* WorkEvidenceTests */,
 				A40000000000000000000008 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -77,7 +90,8 @@
 		A40000000000000000000004 /* Models */ = {isa = PBXGroup; children = (A20000000000000000000002 /* Accomplishment.swift */, A20000000000000000000003 /* EvidenceAttachment.swift */, A20000000000000000000011 /* RequestItem.swift */,); path = Models; sourceTree = "<group>"; };
 		A40000000000000000000005 /* Services */ = {isa = PBXGroup; children = (A20000000000000000000004 /* AttachmentStore.swift */, A20000000000000000000005 /* ExportService.swift */, A2000000000000000000000C /* AppleIntelligenceEnrichmentService.swift */, A2000000000000000000000D /* EvidenceIntelligenceService.swift */, A2000000000000000000000E /* IngestionService.swift */, A2000000000000000000000F /* AppleMailIntegrationService.swift */, A20000000000000000000012 /* RequestIntelligenceService.swift */,); path = Services; sourceTree = "<group>"; };
 		A40000000000000000000006 /* Views */ = {isa = PBXGroup; children = (A20000000000000000000006 /* RootView.swift */, A20000000000000000000007 /* EntryEditorView.swift */, A20000000000000000000008 /* SettingsView.swift */, A20000000000000000000010 /* InsightsView.swift */, A20000000000000000000013 /* RequestIntelligenceView.swift */,); path = Views; sourceTree = "<group>"; };
-		A40000000000000000000008 /* Products */ = {isa = PBXGroup; children = (A2000000000000000000000B /* WorkEvidence.app */,); name = Products; sourceTree = "<group>"; };
+		A40000000000000000000008 /* Products */ = {isa = PBXGroup; children = (A2000000000000000000000B /* WorkEvidence.app */, B20000000000000000000006 /* WorkEvidenceTests.xctest */,); name = Products; sourceTree = "<group>"; };
+		B30000000000000000000001 /* WorkEvidenceTests */ = {isa = PBXGroup; children = (B20000000000000000000001 /* AccomplishmentTests.swift */, B20000000000000000000002 /* RequestIntelligenceServiceTests.swift */, B20000000000000000000003 /* EvidenceIntelligenceServiceTests.swift */, B20000000000000000000004 /* ExportServiceTests.swift */, B20000000000000000000005 /* AttachmentStoreTests.swift */,); path = WorkEvidenceTests; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -96,6 +110,22 @@
 			productReference = A2000000000000000000000B /* WorkEvidence.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B40000000000000000000001 /* WorkEvidenceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B70000000000000000000001 /* Build configuration list for PBXNativeTarget \"WorkEvidenceTests\" */;
+			buildPhases = (
+				B50000000000000000000001 /* Sources */,
+				B50000000000000000000002 /* Frameworks */,
+			);
+			buildRules = ();
+			dependencies = (
+				B80000000000000000000001 /* PBXTargetDependency */,
+			);
+			name = WorkEvidenceTests;
+			productName = WorkEvidenceTests;
+			productReference = B20000000000000000000006 /* WorkEvidenceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -105,7 +135,10 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2700;
-				TargetAttributes = { A50000000000000000000001 = { CreatedOnToolsVersion = 27.0; }; };
+				TargetAttributes = {
+					A50000000000000000000001 = { CreatedOnToolsVersion = 27.0; };
+					B40000000000000000000001 = { CreatedOnToolsVersion = 27.0; TestTargetID = A50000000000000000000001; };
+				};
 			};
 			buildConfigurationList = A80000000000000000000001 /* Build configuration list for PBXProject \"WorkEvidence\" */;
 			compatibilityVersion = "Xcode 16.0";
@@ -116,7 +149,7 @@
 			productRefGroup = A40000000000000000000008 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
-			targets = (A50000000000000000000001 /* WorkEvidence */,);
+			targets = (A50000000000000000000001 /* WorkEvidence */, B40000000000000000000001 /* WorkEvidenceTests */,);
 		};
 /* End PBXProject section */
 
@@ -148,10 +181,40 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B50000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000000000000000000001 /* AccomplishmentTests.swift in Sources */,
+				B10000000000000000000002 /* RequestIntelligenceServiceTests.swift in Sources */,
+				B10000000000000000000003 /* EvidenceIntelligenceServiceTests.swift in Sources */,
+				B10000000000000000000004 /* ExportServiceTests.swift in Sources */,
+				B10000000000000000000005 /* AttachmentStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXContainerItemProxy section */
+		B90000000000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A70000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A50000000000000000000001;
+			remoteInfo = WorkEvidence;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		B80000000000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A50000000000000000000001 /* WorkEvidence */;
+			targetProxy = B90000000000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		A90000000000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 26.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; }; name = Debug; };
+		A90000000000000000000001 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CLANG_ENABLE_MODULES = YES; ENABLE_TESTABILITY = YES; ONLY_ACTIVE_ARCH = YES; MACOSX_DEPLOYMENT_TARGET = 26.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; }; name = Debug; };
 		A90000000000000000000002 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 26.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; }; name = Release; };
 		A90000000000000000000003 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -199,11 +262,42 @@
 			};
 			name = Release;
 		};
+		B60000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.entropyshield.WorkEvidenceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkEvidence.app/Contents/MacOS/WorkEvidence";
+			};
+			name = Debug;
+		};
+		B60000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.entropyshield.WorkEvidenceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WorkEvidence.app/Contents/MacOS/WorkEvidence";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		A80000000000000000000001 /* Build configuration list for PBXProject \"WorkEvidence\" */ = {isa = XCConfigurationList; buildConfigurations = (A90000000000000000000001 /* Debug */, A90000000000000000000002 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 		A80000000000000000000002 /* Build configuration list for PBXNativeTarget \"WorkEvidence\" */ = {isa = XCConfigurationList; buildConfigurations = (A90000000000000000000003 /* Debug */, A90000000000000000000004 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		B70000000000000000000001 /* Build configuration list for PBXNativeTarget \"WorkEvidenceTests\" */ = {isa = XCConfigurationList; buildConfigurations = (B60000000000000000000001 /* Debug */, B60000000000000000000002 /* Release */,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 	};
 	rootObject = A70000000000000000000001 /* Project object */;

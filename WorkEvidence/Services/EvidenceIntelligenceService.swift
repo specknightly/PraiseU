@@ -200,17 +200,25 @@ enum EvidenceIntelligenceService {
         """))
         let text = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw AppleIntelligenceEnrichmentError.emptyResponse }
+        let parsed = parseProfessionalIntelligence(text)
+        return ProfessionalIntelligenceResult(claimStrength: parsed.claimStrength, workLevel: parsed.workLevel, analysis: text)
+    }
+
+    /// Pulled out as a pure function (no model call) so the fragile line-based parsing of the
+    /// on-device model's response can be exercised directly in unit tests.
+    static func parseProfessionalIntelligence(_ text: String) -> (claimStrength: Int, workLevel: WorkLevel) {
         let lines = text.components(separatedBy: .newlines)
-        let scoreLine = lines.first(where: { $0.uppercased().hasPrefix("CLAIM_STRENGTH:") }) ?? ""
-        let score = Int(scoreLine.split(separator: ":").last?.trimmingCharacters(in: .whitespaces) ?? "") ?? 0
-        let levelLine = lines.first(where: { $0.uppercased().hasPrefix("WORK_LEVEL:") })?.uppercased() ?? ""
+        // `.contains` rather than `.hasPrefix` tolerates markdown decoration the model may add, e.g. "**CLAIM_STRENGTH:** 82".
+        let scoreLine = lines.first(where: { $0.uppercased().contains("CLAIM_STRENGTH") }) ?? ""
+        let score = Int(scoreLine.split(separator: ":").last?.trimmingCharacters(in: .whitespaces.union(CharacterSet(charactersIn: "*# "))) ?? "") ?? 0
+        let levelLine = lines.first(where: { $0.uppercased().contains("WORK_LEVEL") })?.uppercased() ?? ""
         let level: WorkLevel
         if levelLine.contains("STRATEGIC") { level = .strategic }
         else if levelLine.contains("PROJECT_OWNER") { level = .projectOwner }
         else if levelLine.contains("SPECIALIST") { level = .specialist }
         else if levelLine.contains("ADVANCED") { level = .advanced }
         else { level = .routine }
-        return ProfessionalIntelligenceResult(claimStrength: max(0, min(100, score)), workLevel: level, analysis: text)
+        return (claimStrength: max(0, min(100, score)), workLevel: level)
     }
 
     private static func limited(_ value: String, to maxCharacters: Int) -> String {

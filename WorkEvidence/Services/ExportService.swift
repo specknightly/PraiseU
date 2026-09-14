@@ -1,6 +1,12 @@
 import Foundation
 
 struct ExportService {
+    /// Files larger than this are never inlined as base64 into exported HTML; a single large
+    /// attachment could otherwise blow the export up to hundreds of MB.
+    static let maxEmbeddedAttachmentBytes: Int64 = 20 * 1_024 * 1_024
+    /// Total embedded-evidence size above which the UI should warn before exporting.
+    static let recommendedExportWarningBytes: Int64 = 150 * 1_024 * 1_024
+
     static func annualReviewHTML(entries: [Accomplishment], year: Int) -> String {
         let sorted = entries.sorted { $0.date > $1.date }
         let dateFormatter = DateFormatter()
@@ -139,6 +145,15 @@ struct ExportService {
         let filename = escape(attachment.originalFilename)
         let size = ByteCountFormatter.string(fromByteCount: attachment.byteCount, countStyle: .file)
 
+        guard attachment.byteCount <= maxEmbeddedAttachmentBytes else {
+            return """
+            <figure class="evidence-item">
+              <div class="evidence-preview"><div class="file-card">Too large to embed (\(escape(size))). Open the original evidence file in Accomplishment Tracker.</div></div>
+              <figcaption><strong>\(filename)</strong> · \(escape(size))</figcaption>
+            </figure>
+            """
+        }
+
         guard let url = AttachmentStore.url(for: attachment.relativePath),
               let data = try? Data(contentsOf: url) else {
             return """
@@ -215,7 +230,7 @@ struct ExportService {
         return "<section><h3>\(escape(heading))</h3><p>\(escape(value))</p></section>"
     }
 
-    private static func escape(_ string: String) -> String {
+    static func escape(_ string: String) -> String {
         string
             .replacingOccurrences(of: "&", with: "&amp;")
             .replacingOccurrences(of: "<", with: "&lt;")
