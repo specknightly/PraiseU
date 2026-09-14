@@ -109,6 +109,16 @@ HOW-TO-USE.md
 
 Some internal storage paths continue to use the historical `WorkEvidence` namespace. This is intentional so upgrades do not strand previously documented accomplishments or evidence files.
 
+## Disclaimer
+
+**This software is provided "AS IS," without warranty of any kind, express or implied**, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. Use it at your own risk.
+
+The developer makes **no guarantee that this app is free of bugs, data loss, or other defects**, and is **not liable for any damages, data loss, misuse, or other consequences** — direct, indirect, incidental, or otherwise — arising from the use of, or inability to use, this software.
+
+**You are solely responsible for what you choose to record in this app**, including any sensitive, personal, proprietary, or confidential information. Accomplishment Tracker does not review, filter, or restrict what you type, attach, or import — that judgment call is yours alone, every time.
+
+Before recording work-related information, **follow your employer's data-handling policies and any applicable laws or regulations** in your jurisdiction. When in doubt, don't record it here — the Settings screen's Data Guidance section and the "Privacy and data boundaries" notes above are reminders, not a substitute for your own judgment about what's appropriate to keep on your machine.
+
 ## License
 
-No open-source license is included in this repository. Copyright remains with the author unless a license is added later.
+This project is licensed under the MIT License — see [`LICENSE`](LICENSE) for the full text.
