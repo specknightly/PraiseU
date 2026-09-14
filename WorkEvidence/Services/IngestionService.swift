@@ -78,8 +78,14 @@ enum IngestionService {
         let note = items["note"] ?? items["context"] ?? ""
         guard !title.isEmpty || !note.isEmpty else { return nil }
         let entry = Accomplishment(date: .now, title: title.isEmpty ? "Captured accomplishment" : title, category: .other, context: note)
-        entry.evidenceNotes = "Captured through local URL ingestion endpoint."
-        if let source = items["source"], !source.isEmpty { entry.tagsText = "source:\(source)" }
+        // Any local app or web page can invoke this URL scheme, so a caller-supplied "source" is an
+        // unverified claim, not a trustworthy integration name — never let it stand in as the real tag,
+        // since this app's entire purpose is a defensible evidence record.
+        let claimedSource = items["source"]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        entry.evidenceNotes = "Captured through the local accomplishmenttracker:// URL scheme. This was not typed directly into the app and has not been verified — review before treating it as your own documented work."
+        entry.tagsText = claimedSource.isEmpty
+            ? "source:external-url,needs-review"
+            : "source:external-url (claimed: \(claimedSource)),needs-review"
         modelContext.insert(entry)
         try? modelContext.save()
         return entry

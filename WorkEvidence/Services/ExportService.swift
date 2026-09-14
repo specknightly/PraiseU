@@ -210,7 +210,6 @@ struct ExportService {
         case "bmp": return "image/bmp"
         case "pdf": return "application/pdf"
         case "txt": return "text/plain"
-        case "html", "htm": return "text/html"
         case "csv": return "text/csv"
         case "json": return "application/json"
         case "doc": return "application/msword"
@@ -220,6 +219,9 @@ struct ExportService {
         case "ppt": return "application/vnd.ms-powerpoint"
         case "pptx": return "application/vnd.openxmlformats-officedocument.presentationml.presentation"
         case "zip": return "application/zip"
+        // "html"/"htm" deliberately fall through here rather than declaring text/html: the figcaption's
+        // "Open evidence at full size" link opens with target="_blank" and no download attribute, so a
+        // text/html data: URI would render — and execute any embedded script — instead of downloading.
         default: return "application/octet-stream"
         }
     }
