@@ -23,7 +23,8 @@ enum RequestIntelligenceService {
 
     static func importNewRequests(accountName: String, mailboxPath: String, modelContext: ModelContext) throws -> [RequestItem] {
         let snapshots = try AppleMailIntegrationService.fetchMessageSnapshots(accountName: accountName, mailboxPath: mailboxPath, limit: maxMessagesPerScan)
-        var processed = Set(UserDefaults.standard.stringArray(forKey: processedIDsKey) ?? [])
+        var orderedProcessed = UserDefaults.standard.stringArray(forKey: processedIDsKey) ?? []
+        var processed = Set(orderedProcessed)
         var imported: [RequestItem] = []
 
         for message in snapshots {
@@ -40,11 +41,12 @@ enum RequestIntelligenceService {
             modelContext.insert(request)
             imported.append(request)
             processed.insert(key)
+            orderedProcessed.append(key)
         }
 
         if !imported.isEmpty {
             try modelContext.save()
-            UserDefaults.standard.set(Array(processed.suffix(5000)), forKey: processedIDsKey)
+            UserDefaults.standard.set(Array(orderedProcessed.suffix(5000)), forKey: processedIDsKey)
         }
         return imported
     }

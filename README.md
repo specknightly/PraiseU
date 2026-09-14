@@ -2,6 +2,8 @@
 
 **Current source release: v1.8.2 Standalone**
 
+Getting recognized for hard work is only getting harder now that AI can produce an answer in seconds. Accomplishment Tracker empowers IT professionals around the world to log the accomplishments worthy of a raise or a promotion — turning day-to-day hard work into a dated, evidence-backed record instead of something you have to reconstruct from memory the night before a review.
+
 Accomplishment Tracker is a local-first macOS application for building a dated, evidence-backed record of professional accomplishments. It is designed for situations where annual performance reviews, promotion cases, or role-scope discussions otherwise depend too heavily on memory and subjective interpretation.
 
 The application combines structured accomplishment records, supporting evidence, native Apple Mail intake, Swift Charts insights, and on-device Apple Intelligence analysis. It does not require the Entropy Shield Workload Evidence application, the Dashboard Harness, or the Incident Tracker.

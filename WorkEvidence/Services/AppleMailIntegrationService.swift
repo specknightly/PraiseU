@@ -105,7 +105,8 @@ enum AppleMailIntegrationService {
         modelContext: ModelContext
     ) throws -> [Accomplishment] {
         let snapshots = try fetchMessageSnapshots(accountName: accountName, mailboxPath: mailboxPath, limit: maxMessagesPerScan)
-        var processed = Set(UserDefaults.standard.stringArray(forKey: processedIDsKey) ?? [])
+        var orderedProcessed = UserDefaults.standard.stringArray(forKey: processedIDsKey) ?? []
+        var processed = Set(orderedProcessed)
         var newlyProcessedKeys: [String] = []
         var importedEntries: [Accomplishment] = []
 
@@ -133,12 +134,13 @@ enum AppleMailIntegrationService {
             modelContext.insert(entry)
             importedEntries.append(entry)
             processed.insert(key)
+            orderedProcessed.append(key)
             newlyProcessedKeys.append(key)
         }
 
         if !importedEntries.isEmpty {
             try modelContext.save()
-            let retained = Array(processed.suffix(5000))
+            let retained = Array(orderedProcessed.suffix(5000))
             UserDefaults.standard.set(retained, forKey: processedIDsKey)
         }
 

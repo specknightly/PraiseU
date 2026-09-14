@@ -4,7 +4,7 @@ import SwiftData
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
 
-    @AppStorage("coreRoleDefinition") private var coreRoleDefinition = "Password resets, routine account access, basic desktop support, and other duties explicitly assigned to my primary IT Support role."
+    @AppStorage("coreRoleDefinition") private var coreRoleDefinition = "Password resets, routine account access, basic desktop support, and other duties explicitly assigned to my primary IT support role."
     @AppStorage("expectedOtherPercent") private var expectedOtherPercent = 10.0
     @AppStorage("autoScanEvidenceInbox") private var autoScanEvidenceInbox = true
 
