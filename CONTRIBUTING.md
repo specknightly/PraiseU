@@ -13,3 +13,7 @@ Before submitting changes:
 7. Build with Swift 6 strict concurrency enabled and resolve warnings where practical.
 
 For UI changes, preserve native macOS behavior and keyboard/accessibility support rather than replacing system components with custom imitations.
+
+## Disclaimer
+
+This project is provided "AS IS," without warranty of any kind, under the MIT License (see `LICENSE`). By contributing, you agree your contributions are licensed under the same terms. Contributions should not introduce cloud AI calls, telemetry, analytics, or any mechanism that transmits user data off-device — this app's entire privacy posture depends on that remaining true. See the README's Disclaimer section for the full terms covering end users.

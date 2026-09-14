@@ -17,4 +17,5 @@ For a clean GitHub release:
 - [x] Info.plist and entitlements lint completed
 - [ ] Run `scripts/preflight.sh` on a Mac with the intended Xcode/macOS SDK before tagging a release
 - [ ] Confirm signing team/bundle identifier for distribution
-- [ ] Decide whether the repository should remain all-rights-reserved or receive an explicit open-source license
+- [ ] MIT `LICENSE` present — currently still has the `[YEAR]` / `[COPYRIGHT HOLDER NAME]` placeholders; fill in before shipping
+- [x] README Disclaimer section, in-app first-launch disclaimer, and Settings legal text all present and consistent

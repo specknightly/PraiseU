@@ -10,6 +10,7 @@ struct QuickCaptureView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openWindow) private var openWindow
+    @AppStorage("hasAcknowledgedDisclaimer") private var hasAcknowledgedDisclaimer = false
 
     @State private var title = ""
     @State private var note = ""
@@ -26,6 +27,16 @@ struct QuickCaptureView: View {
     }
 
     var body: some View {
+        if !hasAcknowledgedDisclaimer {
+            // Quick Capture (menu bar or hotkey) can be someone's very first interaction with the
+            // app, bypassing the main window entirely — so it needs its own copy of the gate.
+            DisclaimerGateView { hasAcknowledgedDisclaimer = true }
+        } else {
+            captureForm
+        }
+    }
+
+    private var captureForm: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Quick Capture").font(.headline)
             Text("Jot it down now, while it's fresh. Add evidence and details later.")

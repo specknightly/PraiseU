@@ -216,6 +216,15 @@ struct SettingsView: View {
                 Text("Use Accomplishment Tracker for professional accomplishment records and supporting documentation. Avoid passwords, authentication secrets, regulated personal data, or information your employer prohibits from being copied locally.")
                     .font(.callout).foregroundStyle(.secondary)
             }
+
+            Section("Legal") {
+                Text("This software is provided \u{201c}AS IS,\u{201d} without warranty of any kind, express or implied. The developer is not liable for any damages, data loss, misuse, or other consequences arising from use of this app.")
+                    .font(.callout).foregroundStyle(.secondary)
+                Text("You are solely responsible for what you choose to record here, including any sensitive, personal, proprietary, or confidential information. Follow your employer's data-handling policies and any applicable laws or regulations when recording work-related information.")
+                    .font(.callout).foregroundStyle(.secondary)
+                Text("Full terms: LICENSE (MIT) and the Disclaimer section of README.md, included with this app's source.")
+                    .font(.caption).foregroundStyle(.tertiary)
+            }
         }
         .formStyle(.grouped)
         .padding()

@@ -51,6 +51,7 @@ struct RootView: View {
     @AppStorage("requestMailScanIntervalMinutes") private var requestMailScanIntervalMinutes = 10.0
     @AppStorage("requestMailAutoAnalyze") private var requestMailAutoAnalyze = false
     @AppStorage("coreRoleDefinition") private var coreRoleDefinition = "Password resets, routine account access, basic desktop support, and other duties explicitly assigned to my primary IT support role."
+    @AppStorage("hasAcknowledgedDisclaimer") private var hasAcknowledgedDisclaimer = false
     @AppStorage("expectedOtherPercent") private var expectedOtherPercent = 10.0
 
     private var currentYear: Int { Calendar.current.component(.year, from: .now) }
@@ -189,6 +190,10 @@ struct RootView: View {
                 categoryFilter = nil
                 ingestionStatus = "Captured a new accomplishment from a local automation."
             }
+        }
+        .sheet(isPresented: Binding(get: { !hasAcknowledgedDisclaimer }, set: { _ in })) {
+            DisclaimerGateView { hasAcknowledgedDisclaimer = true }
+                .interactiveDismissDisabled(true)
         }
         .alert("Evidence Inbox", isPresented: Binding(
             get: { ingestionStatus != nil },

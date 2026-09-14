@@ -16,6 +16,6 @@
 </dict></array>
 <key>LSApplicationCategoryType</key><string>public.app-category.productivity</string>
 <key>NSAppleEventsUsageDescription</key><string>Accomplishment Tracker reads messages only from the Apple Mail mailbox you select so it can create local evidence drafts and analyze them on this Mac.</string>
-<key>NSHumanReadableCopyright</key><string>Developed by Peter Odintsov</string>
+<key>NSHumanReadableCopyright</key><string>Developed by Peter Odintsov. Provided "AS IS," without warranty of any kind. See LICENSE and the README Disclaimer.</string>
 <key>NSPrincipalClass</key><string>NSApplication</string>
 </dict></plist>
