@@ -3,6 +3,12 @@ import SwiftData
 import AppKit
 import UniformTypeIdentifiers
 
+private extension Color {
+    /// Matches the Entropy Shield house style used across the other apps in the suite.
+    static let entropyShieldNavy = Color(red: 0.043, green: 0.067, blue: 0.145)
+    static let entropyShieldGold = Color(red: 0.80, green: 0.70, blue: 0.42)
+}
+
 private enum LibraryScope: String, CaseIterable, Identifiable {
     case all = "All Evidence"
     case thisYear = "This Year"
@@ -316,14 +322,16 @@ struct RootView: View {
 
                 Text("Developed by")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.entropyShieldGold.opacity(0.8))
 
                 Text("Peter Odintsov")
                     .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.entropyShieldGold)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
+            .background(Color.entropyShieldNavy)
         }
         .navigationTitle("Accomplishment Tracker")
     }
