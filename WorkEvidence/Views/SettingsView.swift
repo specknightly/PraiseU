@@ -7,6 +7,7 @@ struct SettingsView: View {
     @AppStorage("coreRoleDefinition") private var coreRoleDefinition = "Password resets, routine account access, basic desktop support, and other duties explicitly assigned to my primary IT support role."
     @AppStorage("expectedOtherPercent") private var expectedOtherPercent = 10.0
     @AppStorage("autoScanEvidenceInbox") private var autoScanEvidenceInbox = true
+    @AppStorage("showMenuBarQuickCapture") private var showMenuBarQuickCapture = true
 
     @AppStorage("appleMailIntegrationEnabled") private var appleMailIntegrationEnabled = false
     @AppStorage("appleMailAccountName") private var appleMailAccountName = ""
@@ -182,6 +183,12 @@ struct SettingsView: View {
                 Text("Request Intelligence remains fully local to Accomplishment Tracker and does not hand work items to another Entropy Shield application in this standalone build.")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
+            }
+
+            Section("Quick Capture") {
+                Toggle("Show quick-capture icon in the menu bar", isOn: $showMenuBarQuickCapture)
+                Text("Click the menu bar icon any time to jot down an accomplishment in a few seconds without opening the full window. It only asks for a title and a note — add evidence, metrics, and AI analysis later from the full editor.")
+                    .font(.callout).foregroundStyle(.secondary)
             }
 
             Section("Automatic Ingestion") {

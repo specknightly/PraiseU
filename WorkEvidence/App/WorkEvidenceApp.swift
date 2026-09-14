@@ -3,6 +3,8 @@ import SwiftData
 
 @main
 struct WorkEvidenceApp: App {
+    @AppStorage("showMenuBarQuickCapture") private var showMenuBarQuickCapture = true
+
     private let container: ModelContainer = {
         let schema = Schema([
             Accomplishment.self,
@@ -26,7 +28,7 @@ struct WorkEvidenceApp: App {
     }()
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "main") {
             RootView()
                 .frame(minWidth: 1100, minHeight: 720)
         }
@@ -40,6 +42,12 @@ struct WorkEvidenceApp: App {
             }
         }
 
+        MenuBarExtra("Quick Capture", systemImage: "square.and.pencil", isInserted: $showMenuBarQuickCapture) {
+            QuickCaptureView()
+                .modelContainer(container)
+        }
+        .menuBarExtraStyle(.window)
+
         Settings {
             SettingsView()
                 .frame(minWidth: 680, idealWidth: 820, minHeight: 560, idealHeight: 760)
@@ -50,4 +58,5 @@ struct WorkEvidenceApp: App {
 
 extension Notification.Name {
     static let newAccomplishment = Notification.Name("WorkEvidence.newAccomplishment")
+    static let revealAccomplishment = Notification.Name("WorkEvidence.revealAccomplishment")
 }

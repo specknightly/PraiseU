@@ -148,6 +148,14 @@ struct RootView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .newAccomplishment)) { _ in addEntry() }
+        .onReceive(NotificationCenter.default.publisher(for: .revealAccomplishment)) { notification in
+            guard let id = notification.object as? UUID else { return }
+            showingInsights = false
+            showingRequestIntelligence = false
+            scope = .all
+            categoryFilter = nil
+            selectedEntryID = id
+        }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             if autoScanEvidenceInbox { scanEvidenceInbox(silentWhenEmpty: true) }
             if appleMailIntegrationEnabled && appleMailCreateDraftsAutomatically { mailScanTask = Task { await scanAppleMail(silentWhenEmpty: true) } }
