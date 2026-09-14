@@ -24,6 +24,7 @@
 		A10000000000000000000012 /* RequestIntelligenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* RequestIntelligenceService.swift */; };
 		A10000000000000000000013 /* RequestIntelligenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* RequestIntelligenceView.swift */; };
 		A10000000000000000000014 /* QuickCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* QuickCaptureView.swift */; };
+		A10000000000000000000015 /* QuickCaptureHotKeyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* QuickCaptureHotKeyController.swift */; };
 		B10000000000000000000001 /* AccomplishmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000001 /* AccomplishmentTests.swift */; };
 		B10000000000000000000002 /* RequestIntelligenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000002 /* RequestIntelligenceServiceTests.swift */; };
 		B10000000000000000000003 /* EvidenceIntelligenceServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20000000000000000000003 /* EvidenceIntelligenceServiceTests.swift */; };
@@ -51,6 +52,7 @@
 		A20000000000000000000012 /* RequestIntelligenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIntelligenceService.swift; sourceTree = "<group>"; };
 		A20000000000000000000013 /* RequestIntelligenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIntelligenceView.swift; sourceTree = "<group>"; };
 		A20000000000000000000014 /* QuickCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCaptureView.swift; sourceTree = "<group>"; };
+		A20000000000000000000015 /* QuickCaptureHotKeyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickCaptureHotKeyController.swift; sourceTree = "<group>"; };
 		A2000000000000000000000B /* WorkEvidence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkEvidence.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B20000000000000000000001 /* AccomplishmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccomplishmentTests.swift; sourceTree = "<group>"; };
 		B20000000000000000000002 /* RequestIntelligenceServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestIntelligenceServiceTests.swift; sourceTree = "<group>"; };
@@ -90,7 +92,7 @@
 		};
 		A40000000000000000000003 /* App */ = {isa = PBXGroup; children = (A20000000000000000000001 /* WorkEvidenceApp.swift */,); path = App; sourceTree = "<group>"; };
 		A40000000000000000000004 /* Models */ = {isa = PBXGroup; children = (A20000000000000000000002 /* Accomplishment.swift */, A20000000000000000000003 /* EvidenceAttachment.swift */, A20000000000000000000011 /* RequestItem.swift */,); path = Models; sourceTree = "<group>"; };
-		A40000000000000000000005 /* Services */ = {isa = PBXGroup; children = (A20000000000000000000004 /* AttachmentStore.swift */, A20000000000000000000005 /* ExportService.swift */, A2000000000000000000000C /* AppleIntelligenceEnrichmentService.swift */, A2000000000000000000000D /* EvidenceIntelligenceService.swift */, A2000000000000000000000E /* IngestionService.swift */, A2000000000000000000000F /* AppleMailIntegrationService.swift */, A20000000000000000000012 /* RequestIntelligenceService.swift */,); path = Services; sourceTree = "<group>"; };
+		A40000000000000000000005 /* Services */ = {isa = PBXGroup; children = (A20000000000000000000004 /* AttachmentStore.swift */, A20000000000000000000005 /* ExportService.swift */, A2000000000000000000000C /* AppleIntelligenceEnrichmentService.swift */, A2000000000000000000000D /* EvidenceIntelligenceService.swift */, A2000000000000000000000E /* IngestionService.swift */, A2000000000000000000000F /* AppleMailIntegrationService.swift */, A20000000000000000000012 /* RequestIntelligenceService.swift */, A20000000000000000000015 /* QuickCaptureHotKeyController.swift */,); path = Services; sourceTree = "<group>"; };
 		A40000000000000000000006 /* Views */ = {isa = PBXGroup; children = (A20000000000000000000006 /* RootView.swift */, A20000000000000000000007 /* EntryEditorView.swift */, A20000000000000000000008 /* SettingsView.swift */, A20000000000000000000010 /* InsightsView.swift */, A20000000000000000000013 /* RequestIntelligenceView.swift */, A20000000000000000000014 /* QuickCaptureView.swift */,); path = Views; sourceTree = "<group>"; };
 		A40000000000000000000008 /* Products */ = {isa = PBXGroup; children = (A2000000000000000000000B /* WorkEvidence.app */, B20000000000000000000006 /* WorkEvidenceTests.xctest */,); name = Products; sourceTree = "<group>"; };
 		B30000000000000000000001 /* WorkEvidenceTests */ = {isa = PBXGroup; children = (B20000000000000000000001 /* AccomplishmentTests.swift */, B20000000000000000000002 /* RequestIntelligenceServiceTests.swift */, B20000000000000000000003 /* EvidenceIntelligenceServiceTests.swift */, B20000000000000000000004 /* ExportServiceTests.swift */, B20000000000000000000005 /* AttachmentStoreTests.swift */,); path = WorkEvidenceTests; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				A10000000000000000000012 /* RequestIntelligenceService.swift in Sources */,
 				A10000000000000000000013 /* RequestIntelligenceView.swift in Sources */,
 				A10000000000000000000014 /* QuickCaptureView.swift in Sources */,
+				A10000000000000000000015 /* QuickCaptureHotKeyController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

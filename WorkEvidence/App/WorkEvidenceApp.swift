@@ -27,6 +27,10 @@ struct WorkEvidenceApp: App {
         }
     }()
 
+    init() {
+        QuickCaptureHotKeyController.shared.activate(modelContainer: container)
+    }
+
     var body: some Scene {
         WindowGroup(id: "main") {
             RootView()

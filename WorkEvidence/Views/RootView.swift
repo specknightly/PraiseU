@@ -301,7 +301,7 @@ struct RootView: View {
         }
         .listStyle(.sidebar)
         .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 8) {
                 Image("EntropyShieldLogo")
                     .resizable()
                     .scaledToFit()
@@ -316,7 +316,7 @@ struct RootView: View {
                 Text("Peter Odintsov")
                     .font(.subheadline.weight(.semibold))
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
         }

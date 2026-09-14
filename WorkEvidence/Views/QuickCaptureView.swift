@@ -15,6 +15,11 @@ struct QuickCaptureView: View {
     @State private var note = ""
     @State private var didSave = false
 
+    /// `dismiss()` only does something when SwiftUI itself is managing presentation, which is true
+    /// for the menu bar popover but not for the hotkey panel (a plain NSPanel we show ourselves) —
+    /// that path supplies this to actually close the window.
+    var onRequestClose: (() -> Void)?
+
     private var canSave: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             || !note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -56,7 +61,7 @@ struct QuickCaptureView: View {
 
                 Spacer()
 
-                Button("Close") { dismiss() }
+                Button("Close") { dismiss(); onRequestClose?() }
                     .buttonStyle(.borderless)
             }
         }
@@ -97,5 +102,6 @@ struct QuickCaptureView: View {
             openWindow(id: "main")
         }
         dismiss()
+        onRequestClose?()
     }
 }
