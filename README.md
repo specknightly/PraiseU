@@ -8,6 +8,8 @@ Accomplishment Tracker is a local-first macOS application for building a dated, 
 
 The application combines structured accomplishment records, supporting evidence, native Apple Mail intake, Swift Charts insights, and on-device Apple Intelligence analysis. 
 
+**New here?** See [`HOW-TO-USE.md`](HOW-TO-USE.md) for a walkthrough — quick capture, the Evidence Framework, the AI features, and exports.
+
 ## Highlights
 
 - Dated accomplishment records with context, action, outcome, impact, metrics, stakeholders, tags, and evidence notes.
@@ -100,6 +102,7 @@ WorkEvidence/
 WorkEvidence.xcodeproj/
 ARCHITECTURE.md
 CHANGELOG.md
+HOW-TO-USE.md
 ```
 
 ## Local storage compatibility
