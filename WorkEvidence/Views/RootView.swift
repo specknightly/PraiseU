@@ -22,7 +22,6 @@ struct RootView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Accomplishment.date, order: .reverse) private var entries: [Accomplishment]
 
-    @State private var columnVisibility: NavigationSplitViewVisibility = .all
     @State private var scope: LibraryScope = .thisYear
     @State private var categoryFilter: AccomplishmentCategory?
     @State private var searchText = ""
@@ -83,21 +82,21 @@ struct RootView: View {
     var body: some View {
         Group {
             if showingRequestIntelligence {
-                NavigationSplitView(columnVisibility: $columnVisibility) {
+                NavigationSplitView {
                     sidebar
                         .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 300)
                 } detail: {
                     RequestIntelligenceView()
                 }
             } else if showingInsights {
-                NavigationSplitView(columnVisibility: $columnVisibility) {
+                NavigationSplitView {
                     sidebar
                         .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 300)
                 } detail: {
                     InsightsView(entries: entries)
                 }
             } else {
-                NavigationSplitView(columnVisibility: $columnVisibility) {
+                NavigationSplitView {
                     sidebar
                         .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 300)
                 } content: {
@@ -314,44 +313,6 @@ struct RootView: View {
         .scrollContentBackground(.hidden)
         .entropyShieldBackdrop()
         .navigationTitle("Accomplishment Tracker")
-        // The system's automatic sidebar-toggle button always renders first (leftmost) in the
-        // .navigation group, so there's no way to place custom content before it — only after.
-        // Removing it and supplying our own is the only way to control that ordering.
-        .toolbar(removing: .sidebarToggle)
-        .toolbar {
-            ToolbarItem(placement: .navigation) {
-                HStack(spacing: 6) {
-                    Image("EntropyShieldLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                        .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-                        .accessibilityLabel("Entropy Shield logo")
-
-                    Text("Developed by Peter Odintsov")
-                        .font(.caption)
-                        .foregroundStyle(Color.entropyShieldGoldMuted)
-                }
-            }
-            ToolbarItem(placement: .navigation) {
-                Button(action: toggleSidebar) {
-                    Image(systemName: "sidebar.leading")
-                }
-                .help("Toggle Sidebar")
-            }
-        }
-    }
-
-    private func toggleSidebar() {
-        withAnimation {
-            if showingInsights || showingRequestIntelligence {
-                // Two-column split (sidebar + detail).
-                columnVisibility = columnVisibility == .detailOnly ? .all : .detailOnly
-            } else {
-                // Three-column split (sidebar + content + detail) — collapse just the sidebar.
-                columnVisibility = columnVisibility == .doubleColumn ? .all : .doubleColumn
-            }
-        }
     }
 
     private var evidenceList: some View {
