@@ -35,6 +35,8 @@ struct WorkEvidenceApp: App {
         WindowGroup(id: "main") {
             RootView()
                 .frame(minWidth: 1100, minHeight: 720)
+                .preferredColorScheme(.dark)
+                .tint(EntropyShieldTheme.gold)
         }
         .modelContainer(container)
         .commands {
@@ -49,6 +51,8 @@ struct WorkEvidenceApp: App {
         MenuBarExtra("Quick Capture", systemImage: "square.and.pencil", isInserted: $showMenuBarQuickCapture) {
             QuickCaptureView()
                 .modelContainer(container)
+                .preferredColorScheme(.dark)
+                .tint(EntropyShieldTheme.gold)
         }
         .menuBarExtraStyle(.window)
 
@@ -56,6 +60,8 @@ struct WorkEvidenceApp: App {
             SettingsView()
                 .frame(minWidth: 680, idealWidth: 820, minHeight: 560, idealHeight: 760)
                 .modelContainer(container)
+                .preferredColorScheme(.dark)
+                .tint(EntropyShieldTheme.gold)
         }
     }
 }

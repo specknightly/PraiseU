@@ -38,10 +38,10 @@ struct QuickCaptureView: View {
 
     private var captureForm: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Quick Capture").font(.headline)
+            Text("Quick Capture").font(.headline).foregroundStyle(Color.entropyShieldGold)
             Text("Jot it down now, while it's fresh. Add evidence and details later.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.entropyShieldText.opacity(0.7))
 
             TextField("What did you just do?", text: $title)
                 .textFieldStyle(.roundedBorder)
@@ -49,10 +49,10 @@ struct QuickCaptureView: View {
 
             TextEditor(text: $note)
                 .font(.body)
+                .scrollContentBackground(.hidden)
                 .frame(height: 70)
                 .padding(6)
-                .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 8))
-                .overlay { RoundedRectangle(cornerRadius: 8).stroke(.quaternary, lineWidth: 1) }
+                .entropyShieldSurface(cornerRadius: 8)
 
             if didSave {
                 Label("Saved to today's evidence.", systemImage: "checkmark.circle.fill")
@@ -78,6 +78,7 @@ struct QuickCaptureView: View {
         }
         .padding(16)
         .frame(width: 320)
+        .entropyShieldBackdrop()
     }
 
     private func saveAndReset() {

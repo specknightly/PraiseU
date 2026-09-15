@@ -122,7 +122,7 @@ struct InsightsView: View {
                 header
                 metricGrid
 
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)], spacing: 16) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 320), spacing: 16)], spacing: 16) {
                     chartCard("Where Your Work Goes", subtitle: "Accomplishments by category") {
                         if categoryData.isEmpty { emptyChart } else {
                             Chart(categoryData) { item in
@@ -163,7 +163,7 @@ struct InsightsView: View {
                         Chart(monthData) { item in
                             AreaMark(x: .value("Month", item.monthNumber), y: .value("Accomplishments", item.count))
                                 .interpolationMethod(.catmullRom)
-                                .foregroundStyle(.linearGradient(colors: [.accentColor.opacity(0.34), .accentColor.opacity(0.03)], startPoint: .top, endPoint: .bottom))
+                                .foregroundStyle(.linearGradient(colors: [Color.entropyShieldGold.opacity(0.34), Color.entropyShieldGold.opacity(0.03)], startPoint: .top, endPoint: .bottom))
                             LineMark(x: .value("Month", item.monthNumber), y: .value("Accomplishments", item.count))
                                 .interpolationMethod(.catmullRom)
                                 .lineStyle(StrokeStyle(lineWidth: 2.5))
@@ -204,6 +204,7 @@ struct InsightsView: View {
             }
             .padding(24)
         }
+        .entropyShieldBackdrop()
         .navigationTitle("Professional Insights")
         .onChange(of: availableYears) { _, years in
             if !years.contains(selectedYear), let first = years.first { selectedYear = first }
@@ -215,8 +216,9 @@ struct InsightsView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Professional Insights")
                     .font(.largeTitle.bold())
+                    .foregroundStyle(Color.entropyShieldGold)
                 Text("Visualize what your documented work demonstrates, not just how many entries you have.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.entropyShieldText.opacity(0.75))
             }
             Spacer()
             Picker("Year", selection: $selectedYear) {
@@ -227,7 +229,10 @@ struct InsightsView: View {
     }
 
     private var metricGrid: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
+        // Adaptive rather than a fixed 4-column grid: at the detail column's minimum width, four
+        // flexible tiles had no room to breathe and their labels clipped, same issue as the
+        // evidence-list summary strip. This wraps to more rows instead of squeezing.
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150, maximum: 260), spacing: 12)], spacing: 12) {
             metricCard("Accomplishments", value: "\(yearEntries.count)", detail: "documented this year", symbol: "checkmark.seal")
             metricCard("Evidence Health", value: "\(evidenceHealthScore)", detail: "out of 100", symbol: "shield.checkered")
             metricCard("Scope Drift", value: "\(Int(scopeDriftPercent.rounded()))%", detail: "expected \(Int(expectedOtherPercent))%", symbol: "arrow.up.right.circle")
@@ -241,16 +246,16 @@ struct InsightsView: View {
 
     private var scopeComparisonCard: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Scope Drift vs. Expected Baseline").font(.headline)
+            Text("Scope Drift vs. Expected Baseline").font(.headline).foregroundStyle(Color.entropyShieldGold)
             Text("This comparison is especially useful when your official role says one thing and the accumulated evidence says something substantially more adventurous.")
-                .font(.callout).foregroundStyle(.secondary)
+                .font(.callout).foregroundStyle(Color.entropyShieldText.opacity(0.75))
 
             Chart {
                 BarMark(x: .value("Percent", expectedOtherPercent), y: .value("Series", "Expected Other Work"))
                     .foregroundStyle(.secondary)
                     .annotation(position: .trailing) { Text("\(Int(expectedOtherPercent))%").font(.caption) }
                 BarMark(x: .value("Percent", scopeDriftPercent), y: .value("Series", "Observed Scope Drift"))
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(Color.entropyShieldGold)
                     .annotation(position: .trailing) { Text("\(Int(scopeDriftPercent.rounded()))%").font(.caption.bold()) }
             }
             .chartXScale(domain: 0...100)
@@ -263,9 +268,10 @@ struct InsightsView: View {
         VStack(alignment: .leading, spacing: 8) {
             Label("How to read these numbers", systemImage: "info.circle")
                 .font(.headline)
+                .foregroundStyle(Color.entropyShieldGold)
             Text("Evidence Health measures documentation quality, not your worth as an employee. It combines average AI claim-strength (45%), evidence coverage (35%), and Professional Intelligence coverage (20%). Scope Drift is calculated only from accomplishments already classified as Core Role or Other / Scope Drift. Advanced+ Work includes Advanced, Specialist, Project Owner, and Strategic / Leadership classifications.")
                 .font(.callout)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.entropyShieldText.opacity(0.75))
         }
         .insightCardStyle()
     }
@@ -274,8 +280,8 @@ struct InsightsView: View {
     private func chartCard<Content: View>(_ title: String, subtitle: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(title).font(.headline)
-                Text(subtitle).font(.caption).foregroundStyle(.secondary)
+                Text(title).font(.headline).foregroundStyle(Color.entropyShieldGold)
+                Text(subtitle).font(.caption).foregroundStyle(Color.entropyShieldText.opacity(0.7))
             }
             content()
                 .frame(minHeight: 240, idealHeight: 270)
@@ -291,9 +297,10 @@ struct InsightsView: View {
             Text(value)
                 .font(.system(size: 30, weight: .bold, design: .rounded))
                 .monospacedDigit()
+                .foregroundStyle(Color.entropyShieldGold)
             Text(detail)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.entropyShieldText.opacity(0.7))
         }
         .frame(maxWidth: .infinity, minHeight: 105, alignment: .leading)
         .insightCardStyle()
@@ -321,7 +328,6 @@ private extension View {
     func insightCardStyle() -> some View {
         self
             .padding(16)
-            .background(.quaternary.opacity(0.16), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay { RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(.quaternary, lineWidth: 1) }
+            .entropyShieldSurface(cornerRadius: 16)
     }
 }

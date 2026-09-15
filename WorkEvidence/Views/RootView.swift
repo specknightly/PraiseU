@@ -3,12 +3,6 @@ import SwiftData
 import AppKit
 import UniformTypeIdentifiers
 
-private extension Color {
-    /// Matches the Entropy Shield house style used across the other apps in the suite.
-    static let entropyShieldNavy = Color(red: 0.043, green: 0.067, blue: 0.145)
-    static let entropyShieldGold = Color(red: 0.80, green: 0.70, blue: 0.42)
-}
-
 private enum LibraryScope: String, CaseIterable, Identifiable {
     case all = "All Evidence"
     case thisYear = "This Year"
@@ -107,7 +101,7 @@ struct RootView: View {
                         .navigationSplitViewColumnWidth(min: 220, ideal: 250, max: 300)
                 } content: {
                     evidenceList
-                        .navigationSplitViewColumnWidth(min: 330, ideal: 390, max: 520)
+                        .navigationSplitViewColumnWidth(min: 360, ideal: 390, max: 520)
                 } detail: {
                     Group {
                         if let selectedEntry {
@@ -118,6 +112,7 @@ struct RootView: View {
                                 systemImage: "doc.text.magnifyingglass",
                                 description: Text("Choose an entry from the evidence list, or create a new one.")
                             )
+                            .entropyShieldBackdrop()
                         }
                     }
                     .navigationSplitViewColumnWidth(min: 460, ideal: 620)
@@ -264,6 +259,7 @@ struct RootView: View {
                     }
                     .buttonStyle(.plain)
                     .fontWeight(scope == item && categoryFilter == nil ? .semibold : .regular)
+                    .foregroundStyle(scope == item && categoryFilter == nil ? Color.entropyShieldGold : Color.entropyShieldText)
                 }
             }
 
@@ -278,6 +274,7 @@ struct RootView: View {
                 }
                 .buttonStyle(.plain)
                 .fontWeight(showingInsights ? .semibold : .regular)
+                .foregroundStyle(showingInsights ? Color.entropyShieldGold : Color.entropyShieldText)
 
                 Button {
                     showingRequestIntelligence = true
@@ -289,6 +286,7 @@ struct RootView: View {
                 }
                 .buttonStyle(.plain)
                 .fontWeight(showingRequestIntelligence ? .semibold : .regular)
+                .foregroundStyle(showingRequestIntelligence ? Color.entropyShieldGold : Color.entropyShieldText)
             }
 
             Section("Categories") {
@@ -302,15 +300,18 @@ struct RootView: View {
                             Label(category.rawValue, systemImage: category.symbol)
                             Spacer()
                             Text("\(entries.filter { $0.category == category }.count)")
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.entropyShieldGoldMuted)
                         }
                     }
                     .buttonStyle(.plain)
                     .fontWeight(categoryFilter == category ? .semibold : .regular)
+                    .foregroundStyle(categoryFilter == category ? Color.entropyShieldGold : Color.entropyShieldText)
                 }
             }
         }
         .listStyle(.sidebar)
+        .scrollContentBackground(.hidden)
+        .entropyShieldBackdrop()
         .safeAreaInset(edge: .bottom) {
             VStack(alignment: .leading, spacing: 8) {
                 Image("EntropyShieldLogo")
@@ -331,7 +332,7 @@ struct RootView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
-            .background(Color.entropyShieldNavy)
+            .entropyShieldBackdrop()
         }
         .navigationTitle("Accomplishment Tracker")
     }
@@ -353,6 +354,7 @@ struct RootView: View {
             } else {
                 List(filteredEntries, id: \.id) { entry in
                     EntryRow(entry: entry, isSelected: selectedEntryID == entry.id)
+                        .listRowBackground(Color.clear)
                         .contentShape(Rectangle())
                         .onTapGesture { showingInsights = false; showingRequestIntelligence = false; selectedEntryID = entry.id }
                         .contextMenu {
@@ -365,8 +367,10 @@ struct RootView: View {
                         }
                 }
                 .listStyle(.inset)
+                .scrollContentBackground(.hidden)
             }
         }
+        .entropyShieldBackdrop()
         .navigationTitle(categoryFilter?.rawValue ?? scope.rawValue)
         .confirmationDialog(
             "Delete this accomplishment?",
@@ -618,24 +622,25 @@ private struct EntryRow: View {
             HStack(alignment: .firstTextBaseline) {
                 Text(entry.title.isEmpty ? "Untitled accomplishment" : entry.title)
                     .font(.headline)
+                    .foregroundStyle(Color.entropyShieldText)
                     .lineLimit(2)
                 Spacer(minLength: 10)
                 if entry.humanValueAnalysis != nil {
                     Image(systemName: "sparkles")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.entropyShieldGoldMuted)
                         .help("Human Value Analysis saved")
                 }
                 if entry.isPinned {
                     Image(systemName: "pin.fill")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.entropyShieldGoldMuted)
                 }
             }
 
             Text(entry.outcome.isEmpty ? entry.actionTaken : entry.outcome)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.entropyShieldText.opacity(0.7))
                 .lineLimit(2)
 
             HStack(spacing: 8) {
@@ -645,11 +650,11 @@ private struct EntryRow: View {
                 Text(entry.date, format: .dateTime.month(.abbreviated).day().year())
             }
             .font(.caption)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Color.entropyShieldGoldMuted)
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 4)
-        .background(isSelected ? Color.accentColor.opacity(0.10) : .clear, in: RoundedRectangle(cornerRadius: 8))
+        .background(isSelected ? Color.entropyShieldGold.opacity(0.16) : .clear, in: RoundedRectangle(cornerRadius: 8))
     }
 }
 
@@ -679,7 +684,10 @@ private struct YearSummaryView: View {
     }
 
     var body: some View {
-        HStack(spacing: 12) {
+        // An adaptive grid rather than a fixed 5-wide HStack: at the content column's minimum
+        // width (or right at launch, before the window settles) five flexible tiles in one row
+        // had no room to breathe and their labels got clipped. This wraps to more rows instead.
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 118, maximum: 220), spacing: 12)], spacing: 12) {
             metric(title: "This Year", value: entries.count, symbol: "calendar")
             metric(title: "This Month", value: thisMonth, symbol: "calendar.badge.clock")
             metric(title: "With Metrics", value: withMetrics, symbol: "chart.bar")
@@ -691,15 +699,18 @@ private struct YearSummaryView: View {
     private func metric(title: String, value: Int, symbol: String) -> some View {
         VStack(alignment: .leading, spacing: 5) {
             Image(systemName: symbol)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.entropyShieldGoldMuted)
             Text("\(value)")
                 .font(.title2.weight(.semibold))
+                .foregroundStyle(Color.entropyShieldGold)
             Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.entropyShieldText.opacity(0.75))
+                .lineLimit(1)
+                .minimumScaleFactor(0.85)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
+        .entropyShieldSurface(cornerRadius: 12)
     }
 }

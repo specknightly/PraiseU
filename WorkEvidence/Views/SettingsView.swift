@@ -8,6 +8,7 @@ struct SettingsView: View {
     @AppStorage("expectedOtherPercent") private var expectedOtherPercent = 10.0
     @AppStorage("autoScanEvidenceInbox") private var autoScanEvidenceInbox = true
     @AppStorage("showMenuBarQuickCapture") private var showMenuBarQuickCapture = true
+    @AppStorage("useGlassEffect") private var useGlassEffect = false
 
     @AppStorage("appleMailIntegrationEnabled") private var appleMailIntegrationEnabled = false
     @AppStorage("appleMailAccountName") private var appleMailAccountName = ""
@@ -43,6 +44,12 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
+            Section("Appearance") {
+                Toggle("Transparent glass effect", isOn: $useGlassEffect)
+                Text("Replaces the solid navy panels with a frosted, translucent glass look throughout the app. Off by default.")
+                    .font(.callout).foregroundStyle(.secondary)
+            }
+
             Section("Role Baseline") {
                 Text("Scope Drift compares documented accomplishments against what your job is actually supposed to cover. Define the baseline in plain language; Apple Intelligence uses it only for local inference.")
                     .font(.callout)
@@ -229,6 +236,8 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .padding()
         .frame(minWidth: 680, minHeight: 560)
+        .scrollContentBackground(.hidden)
+        .entropyShieldBackdrop()
     }
 
     @MainActor

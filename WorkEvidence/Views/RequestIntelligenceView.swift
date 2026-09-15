@@ -31,6 +31,8 @@ struct RequestIntelligenceView: View {
                 .tag(request.id)
                 .padding(.vertical, 4)
             }
+            .scrollContentBackground(.hidden)
+            .entropyShieldBackdrop()
             .navigationTitle("Request Inbox")
             .navigationSplitViewColumnWidth(min: 300, ideal: 360, max: 480)
         } detail: {
@@ -39,11 +41,11 @@ struct RequestIntelligenceView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         HStack(alignment: .firstTextBaseline) {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(request.subject).font(.title2.bold())
-                                Text("From \(request.sender)").foregroundStyle(.secondary)
+                                Text(request.subject).font(.title2.bold()).foregroundStyle(Color.entropyShieldGold)
+                                Text("From \(request.sender)").foregroundStyle(Color.entropyShieldText.opacity(0.75))
                             }
                             Spacer()
-                            Text(request.priority).font(.headline)
+                            Text(request.priority).font(.headline).foregroundStyle(Color.entropyShieldGold)
                         }
 
                         GroupBox("Request Digest") { Text(request.digest.isEmpty ? "Not analyzed yet." : request.digest).frame(maxWidth: .infinity, alignment: .leading).padding(6) }
@@ -67,9 +69,11 @@ struct RequestIntelligenceView: View {
                     }
                     .padding(24)
                 }
+                .entropyShieldBackdrop()
                 .navigationTitle("Request Intelligence")
             } else {
                 ContentUnavailableView("Select a request", systemImage: "tray.2", description: Text("New mail from the experimental request mailbox appears here for local analysis and response drafting."))
+                    .entropyShieldBackdrop()
             }
         }
         .toolbar {

@@ -31,6 +31,7 @@ struct EntryEditorView: View {
             .padding(28)
             .frame(maxWidth: 900, alignment: .leading)
         }
+        .entropyShieldBackdrop()
         .navigationTitle(entry.title.isEmpty ? "Accomplishment" : entry.title)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -70,6 +71,7 @@ struct EntryEditorView: View {
         VStack(alignment: .leading, spacing: 14) {
             TextField("Accomplishment title", text: $entry.title)
                 .font(.largeTitle.weight(.bold))
+                .foregroundStyle(Color.entropyShieldGold)
                 .textFieldStyle(.plain)
                 .onChange(of: entry.title) { _, _ in touch() }
 
@@ -221,11 +223,7 @@ struct EntryEditorView: View {
             }
         }
         .padding(18)
-        .background(.quaternary.opacity(0.28), in: RoundedRectangle(cornerRadius: 14))
-        .overlay {
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(.quaternary, lineWidth: 1)
-        }
+        .entropyShieldSurface(cornerRadius: 14)
     }
 
     private var hasEnoughEnrichmentDetail: Bool {
@@ -294,9 +292,10 @@ struct EntryEditorView: View {
             if !analysisBinding.wrappedValue.isEmpty {
                 TextEditor(text: analysisBinding)
                     .font(.body)
+                    .scrollContentBackground(.hidden)
                     .frame(minHeight: 180)
                     .padding(8)
-                    .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 10))
+                    .entropyShieldSurface(cornerRadius: 10)
                     .onChange(of: analysisBinding.wrappedValue) { _, _ in touch() }
             } else {
                 Text("No scope inference yet. Run the local analysis after documenting enough context and action detail.")
@@ -329,7 +328,7 @@ struct EntryEditorView: View {
                 Spacer()
                 if let score = entry.claimStrength {
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text("\(score)/100").font(.title2.weight(.bold)).monospacedDigit()
+                        Text("\(score)/100").font(.title2.weight(.bold)).monospacedDigit().foregroundStyle(Color.entropyShieldGold)
                         Text("Claim strength").font(.caption).foregroundStyle(.secondary)
                     }
                 }
@@ -365,17 +364,17 @@ struct EntryEditorView: View {
             if let intelligence = entry.professionalIntelligence, !intelligence.isEmpty {
                 TextEditor(text: Binding(get: { intelligence }, set: { entry.professionalIntelligence = $0; touch() }))
                     .font(.body)
+                    .scrollContentBackground(.hidden)
                     .frame(minHeight: 260)
                     .padding(8)
-                    .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 10))
+                    .entropyShieldSurface(cornerRadius: 10)
             } else {
                 Text("No professional intelligence generated yet. The analysis deliberately challenges weak claims instead of automatically agreeing with them.")
                     .font(.callout).foregroundStyle(.secondary)
             }
         }
         .padding(18)
-        .background(.quaternary.opacity(0.22), in: RoundedRectangle(cornerRadius: 14))
-        .overlay { RoundedRectangle(cornerRadius: 14).stroke(.quaternary, lineWidth: 1) }
+        .entropyShieldSurface(cornerRadius: 14)
     }
 
     @MainActor
@@ -447,7 +446,7 @@ struct EntryEditorView: View {
                 .foregroundStyle(.secondary)
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 12))
+                .entropyShieldSurface(cornerRadius: 12)
             } else {
                 VStack(spacing: 8) {
                     ForEach(entry.attachments.sorted(by: { $0.addedAt > $1.addedAt }), id: \.id) { attachment in
@@ -483,8 +482,8 @@ struct EntryEditorView: View {
 
     private func sectionHeading(_ title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title).font(.title3.weight(.semibold))
-            Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
+            Text(title).font(.title3.weight(.semibold)).foregroundStyle(Color.entropyShieldGold)
+            Text(subtitle).font(.subheadline).foregroundStyle(Color.entropyShieldText.opacity(0.7))
         }
     }
 
@@ -536,18 +535,14 @@ private struct EditorField: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
-            Text(title).font(.headline)
-            Text(prompt).font(.caption).foregroundStyle(.secondary)
+            Text(title).font(.headline).foregroundStyle(Color.entropyShieldGold)
+            Text(prompt).font(.caption).foregroundStyle(Color.entropyShieldText.opacity(0.65))
             TextEditor(text: $text)
                 .font(.body)
                 .scrollContentBackground(.hidden)
                 .padding(9)
                 .frame(minHeight: minHeight)
-                .background(.quaternary.opacity(0.45), in: RoundedRectangle(cornerRadius: 10))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.quaternary, lineWidth: 1)
-                }
+                .entropyShieldSurface(cornerRadius: 10)
                 .onChange(of: text) { _, _ in onChange() }
         }
     }
@@ -580,6 +575,6 @@ private struct AttachmentRow: View {
             .buttonStyle(.borderless)
         }
         .padding(12)
-        .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 10))
+        .entropyShieldSurface(cornerRadius: 10)
     }
 }

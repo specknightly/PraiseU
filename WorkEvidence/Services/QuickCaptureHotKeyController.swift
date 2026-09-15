@@ -63,6 +63,8 @@ final class QuickCaptureHotKeyController {
         let hosting = NSHostingController(
             rootView: QuickCaptureView(onRequestClose: { [weak self] in self?.panel?.orderOut(nil) })
                 .modelContainer(modelContainer)
+                .preferredColorScheme(.dark)
+                .tint(EntropyShieldTheme.gold)
         )
         let panel = QuickCapturePanel(contentViewController: hosting)
         panel.isFloatingPanel = true

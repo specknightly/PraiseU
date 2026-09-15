@@ -9,6 +9,7 @@ struct DisclaimerGateView: View {
         VStack(alignment: .leading, spacing: 18) {
             Label("Before You Start", systemImage: "exclamationmark.shield")
                 .font(.title2.weight(.semibold))
+                .foregroundStyle(Color.entropyShieldGold)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
@@ -31,12 +32,13 @@ struct DisclaimerGateView: View {
         }
         .padding(28)
         .frame(width: 480)
+        .entropyShieldBackdrop()
     }
 
     private func paragraph(_ text: String) -> some View {
         Text(text)
             .font(.callout)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Color.entropyShieldText.opacity(0.85))
             .fixedSize(horizontal: false, vertical: true)
     }
 }
