@@ -48,6 +48,8 @@ struct EntropyShieldSurface: ViewModifier {
 
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        // No stroke: a filled surface reads as a raised panel on its own. Bordering every panel
+        // on top of that is what made the app feel boxed-in everywhere.
         return content
             .background {
                 if useGlassEffect {
@@ -55,9 +57,6 @@ struct EntropyShieldSurface: ViewModifier {
                 } else {
                     shape.fill(elevated ? EntropyShieldTheme.navySurfaceElevated : EntropyShieldTheme.navySurface)
                 }
-            }
-            .overlay {
-                shape.stroke(EntropyShieldTheme.goldFaint, lineWidth: useGlassEffect ? 0.5 : 1)
             }
     }
 }

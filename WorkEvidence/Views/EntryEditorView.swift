@@ -18,18 +18,26 @@ struct EntryEditorView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            // Flat, flowing sections separated by hairline dividers rather than boxed panels —
+            // the AI sections used to each sit in their own bordered card, which made a single
+            // entry feel like six separate widgets instead of one document.
+            VStack(alignment: .leading, spacing: 28) {
                 header
                 Divider()
                 evidenceFramework
+                Divider()
                 humanValueSection
+                Divider()
                 scopeIntelligenceSection
+                Divider()
                 professionalIntelligenceSection
+                Divider()
                 attachmentSection
+                Divider()
                 metadataSection
             }
             .padding(28)
-            .frame(maxWidth: 900, alignment: .leading)
+            .frame(maxWidth: 820, alignment: .leading)
         }
         .entropyShieldBackdrop()
         .navigationTitle(entry.title.isEmpty ? "Accomplishment" : entry.title)
@@ -222,8 +230,6 @@ struct EntryEditorView: View {
                 }
             }
         }
-        .padding(18)
-        .entropyShieldSurface(cornerRadius: 14)
     }
 
     private var hasEnoughEnrichmentDetail: Bool {
@@ -373,8 +379,6 @@ struct EntryEditorView: View {
                     .font(.callout).foregroundStyle(.secondary)
             }
         }
-        .padding(18)
-        .entropyShieldSurface(cornerRadius: 14)
     }
 
     @MainActor
@@ -444,16 +448,18 @@ struct EntryEditorView: View {
                     Text("No files attached. Add screenshots, exported tickets, PDFs, change records, or other evidence when useful.")
                 }
                 .foregroundStyle(.secondary)
-                .padding(16)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .entropyShieldSurface(cornerRadius: 12)
+                .padding(.vertical, 6)
             } else {
-                VStack(spacing: 8) {
-                    ForEach(entry.attachments.sorted(by: { $0.addedAt > $1.addedAt }), id: \.id) { attachment in
+                let sortedAttachments = entry.attachments.sorted(by: { $0.addedAt > $1.addedAt })
+                VStack(spacing: 0) {
+                    ForEach(sortedAttachments, id: \.id) { attachment in
                         AttachmentRow(attachment: attachment) {
                             open(attachment)
                         } onDelete: {
                             delete(attachment)
+                        }
+                        if attachment.id != sortedAttachments.last?.id {
+                            Divider()
                         }
                     }
                 }
@@ -574,7 +580,6 @@ private struct AttachmentRow: View {
             }
             .buttonStyle(.borderless)
         }
-        .padding(12)
-        .entropyShieldSurface(cornerRadius: 10)
+        .padding(.vertical, 10)
     }
 }

@@ -313,26 +313,23 @@ struct RootView: View {
         .scrollContentBackground(.hidden)
         .entropyShieldBackdrop()
         .safeAreaInset(edge: .bottom) {
-            VStack(alignment: .leading, spacing: 8) {
+            // A quiet footer credit, not a panel: same background as the rest of the sidebar,
+            // one compact row instead of a tall stacked block.
+            HStack(spacing: 10) {
                 Image("EntropyShieldLogo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 92, height: 92)
-                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .frame(width: 28, height: 28)
+                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
                     .accessibilityLabel("Entropy Shield logo")
 
-                Text("Developed by")
+                Text("Developed by Peter Odintsov")
                     .font(.caption)
-                    .foregroundStyle(Color.entropyShieldGold.opacity(0.8))
-
-                Text("Peter Odintsov")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color.entropyShieldGold)
+                    .foregroundStyle(Color.entropyShieldGoldMuted)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-            .entropyShieldBackdrop()
+            .padding(.vertical, 10)
         }
         .navigationTitle("Accomplishment Tracker")
     }
