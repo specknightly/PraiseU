@@ -312,26 +312,25 @@ struct RootView: View {
         .listStyle(.sidebar)
         .scrollContentBackground(.hidden)
         .entropyShieldBackdrop()
-        .safeAreaInset(edge: .bottom) {
-            // A quiet footer credit, not a panel: same background as the rest of the sidebar,
-            // one compact row instead of a tall stacked block.
-            HStack(spacing: 10) {
-                Image("EntropyShieldLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 28, height: 28)
-                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-                    .accessibilityLabel("Entropy Shield logo")
-
-                Text("Developed by Peter Odintsov")
-                    .font(.caption)
-                    .foregroundStyle(Color.entropyShieldGoldMuted)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-        }
         .navigationTitle("Accomplishment Tracker")
+        .toolbar {
+            // Placed in the .navigation group so it lands right next to the system-provided
+            // sidebar-toggle button, rather than the sidebar itself carrying its own footer panel.
+            ToolbarItem(placement: .navigation) {
+                HStack(spacing: 6) {
+                    Image("EntropyShieldLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
+                        .accessibilityLabel("Entropy Shield logo")
+
+                    Text("Developed by Peter Odintsov")
+                        .font(.caption)
+                        .foregroundStyle(Color.entropyShieldGoldMuted)
+                }
+            }
+        }
     }
 
     private var evidenceList: some View {
