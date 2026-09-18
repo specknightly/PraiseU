@@ -14,6 +14,7 @@ struct ContentView: View {
     @EnvironmentObject private var workGraphStore: WorkGraphStore
     @EnvironmentObject private var preventionLedgerStore: PreventionLedgerStore
     @EnvironmentObject private var operationalBurdenStore: OperationalBurdenStore
+    @EnvironmentObject private var responsibilityDriftStore: ResponsibilityDriftStore
     @Environment(\.openSettings) private var openSettings
 
     @State private var mode: TrackerMode = .incidents
@@ -31,6 +32,7 @@ struct ContentView: View {
     @State private var showingWorkGraph = false
     @State private var showingPreventionLedger = false
     @State private var showingOperationalBurden = false
+    @State private var showingResponsibilityDrift = false
     @AppStorage("appleMailAutoScan") private var appleMailAutoScan = false
     @AppStorage("evidenceMailAccount") private var evidenceMailAccount = ""
     @AppStorage("evidenceMailPath") private var evidenceMailPath = ""
@@ -74,13 +76,22 @@ struct ContentView: View {
                 .environmentObject(operationalBurdenStore)
                 .frame(minWidth: 1140, minHeight: 780)
         }
+        .sheet(isPresented: $showingResponsibilityDrift) {
+            ResponsibilityDriftView()
+                .environmentObject(incidentStore)
+                .environmentObject(accomplishmentStore)
+                .environmentObject(workGraphStore)
+                .environmentObject(preventionLedgerStore)
+                .environmentObject(operationalBurdenStore)
+                .environmentObject(responsibilityDriftStore)
+        }
         .onChange(of: incidentSelection) { _, _ in repairIncidentSelection() }
         .onChange(of: accomplishmentSelection) { _, _ in repairAccomplishmentSelection() }
         .onChange(of: searchText) { _, _ in repairIncidentSelection(); repairAccomplishmentSelection() }
         .onChange(of: incidentStore.incidents) { _, _ in repairIncidentSelection() }
         .onChange(of: accomplishmentStore.accomplishments) { _, _ in repairAccomplishmentSelection() }
         .alert("Entropy Shield", isPresented: Binding(
-            get: { incidentStore.lastError != nil || accomplishmentStore.lastError != nil || workGraphStore.lastError != nil || preventionLedgerStore.lastError != nil || operationalBurdenStore.lastError != nil },
+            get: { incidentStore.lastError != nil || accomplishmentStore.lastError != nil || workGraphStore.lastError != nil || preventionLedgerStore.lastError != nil || operationalBurdenStore.lastError != nil || responsibilityDriftStore.lastError != nil },
             set: {
                 if !$0 {
                     incidentStore.lastError = nil
@@ -88,6 +99,8 @@ struct ContentView: View {
                     workGraphStore.lastError = nil
                     preventionLedgerStore.lastError = nil
                     operationalBurdenStore.lastError = nil
+                responsibilityDriftStore.lastError = nil
+                    responsibilityDriftStore.lastError = nil
                 }
             }
         )) {
@@ -99,7 +112,7 @@ struct ContentView: View {
                 operationalBurdenStore.lastError = nil
             }
         }
-        message: { Text(incidentStore.lastError ?? accomplishmentStore.lastError ?? workGraphStore.lastError ?? preventionLedgerStore.lastError ?? operationalBurdenStore.lastError ?? "") }
+        message: { Text(incidentStore.lastError ?? accomplishmentStore.lastError ?? workGraphStore.lastError ?? preventionLedgerStore.lastError ?? operationalBurdenStore.lastError ?? responsibilityDriftStore.lastError ?? "") }
     }
 
     private var topBar: some View {
@@ -156,6 +169,7 @@ struct ContentView: View {
                 Button("Relationship Work Graph") { showingWorkGraph = true }
                 Button("Prevention & Intervention Ledger") { showingPreventionLedger = true }
                 Button("Operational Burden Intelligence") { showingOperationalBurden = true }
+                Button("Responsibility Drift Observatory") { showingResponsibilityDrift = true }
                 Divider()
                 Button("Settings…") { openSettings() }
                 Button("About Entropy Shield Work Record") { showingAbout = true }

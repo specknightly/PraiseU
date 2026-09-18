@@ -44,6 +44,7 @@ struct SettingsView: View {
                     Label("\(workGraphStore.links.count) graph links", systemImage: "link")
                     Label("\(preventionLedgerStore.totalCount) prevention records", systemImage: "shield.checkered")
                     Label("\(operationalBurdenStore.totalCount) burden records", systemImage: "gauge.with.dots.needle.50percent")
+                    Label("\(responsibilityDriftStore.baselines.count) role baselines", systemImage: "arrow.triangle.branch")
                     Label(ByteCountFormatter.string(fromByteCount: validation.totalBytes, countStyle: .file), systemImage: "externaldrive")
                 }.font(.caption).foregroundStyle(.secondary)
                 Text(validation.message).font(.caption).foregroundStyle(validation.isValid ? ESTheme.gold : .red)

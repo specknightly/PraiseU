@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import UniformTypeIdentifiers
 
 enum ResponsibilityDriftExportService {
     static func markdown(report: ResponsibilityDriftReport) -> String {
