@@ -10,6 +10,9 @@ struct PreventionLedgerView: View {
 
     @State private var selectedID: UUID?
     @State private var searchText = ""
+    @State private var intelligence = ""
+    @State private var isAnalyzing = false
+    @State private var analysisError: String?
 
     private var records: [PreventionInterventionRecord] {
         let base = subject.map { ledgerStore.records(linkedTo: $0) } ?? ledgerStore.records
@@ -60,6 +63,27 @@ struct PreventionLedgerView: View {
                 .font(.caption).foregroundStyle(ESTheme.muted)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
+                if subject == nil {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("AVOIDED BURDEN").font(.system(size: 9, weight: .bold)).foregroundStyle(ESTheme.muted)
+                        Text("Measured: \(String(format: "%.1f", ledgerStore.measuredHoursAvoided)) hrs · \(ledgerStore.measuredRecurrencesAvoided) recurrences")
+                            .font(.caption).foregroundStyle(ESTheme.gold)
+                        Text("Estimated: \(String(format: "%.1f", ledgerStore.estimatedHoursAvoided)) hrs · \(ledgerStore.estimatedRecurrencesAvoided) recurrences")
+                            .font(.caption).foregroundStyle(ESTheme.muted)
+                        Button {
+                            analyzeLedger()
+                        } label: {
+                            Label(isAnalyzing ? "Analyzing…" : "Analyze Prevention Value", systemImage: "sparkles")
+                        }
+                        .buttonStyle(.bordered)
+                        .disabled(isAnalyzing || ledgerStore.records.isEmpty || !AccomplishmentAIService.isAvailable)
+                    }
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(ESTheme.panelRaised)
+                    .clipShape(RoundedRectangle(cornerRadius: 9))
+                }
+
                 List(records, selection: $selectedID) { record in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
@@ -85,7 +109,31 @@ struct PreventionLedgerView: View {
             Divider().overlay(ESTheme.border)
 
             ScrollView {
-                if let selectedRecord {
+                if subject == nil, let analysisError {
+                    Label(analysisError, systemImage: "exclamationmark.triangle")
+                        .font(.caption)
+                        .foregroundStyle(ESTheme.gold)
+                        .padding(18)
+                }
+
+                if subject == nil, !intelligence.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Prevention Intelligence").font(.headline)
+                            Spacer()
+                            Text("On-device · non-evidentiary").font(.caption).foregroundStyle(ESTheme.muted)
+                        }
+                        TextEditor(text: $intelligence)
+                            .font(.system(size: 13))
+                            .scrollContentBackground(.hidden)
+                            .padding(8)
+                            .frame(minHeight: 300)
+                            .background(ESTheme.field)
+                            .clipShape(RoundedRectangle(cornerRadius: 9))
+                            .overlay(RoundedRectangle(cornerRadius: 9).stroke(ESTheme.border))
+                    }
+                    .padding(18)
+                } else if let selectedRecord {
                     PreventionRecordEditor(record: selectedRecord)
                         .id(selectedRecord.id)
                         .padding(18)
@@ -108,6 +156,26 @@ struct PreventionLedgerView: View {
         .onChange(of: records.map(\.id)) { _, ids in
             if let selectedID, ids.contains(selectedID) { return }
             self.selectedID = ids.first
+        }
+    }
+
+    private func analyzeLedger() {
+        guard !isAnalyzing else { return }
+        isAnalyzing = true
+        analysisError = nil
+        Task {
+            do {
+                let result = try await PreventionLedgerAIService.summarize(ledgerStore.records)
+                await MainActor.run {
+                    intelligence = result
+                    isAnalyzing = false
+                }
+            } catch {
+                await MainActor.run {
+                    analysisError = error.localizedDescription
+                    isAnalyzing = false
+                }
+            }
         }
     }
 }

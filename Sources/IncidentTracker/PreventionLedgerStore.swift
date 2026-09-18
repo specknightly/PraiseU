@@ -24,11 +24,17 @@ final class PreventionLedgerStore: ObservableObject {
     var totalCount: Int { records.count }
     var measuredCount: Int { records.filter { $0.evidenceBasis == .measured }.count }
     var quantifiedCount: Int { records.filter(\.hasQuantification).count }
-    var totalHoursAvoided: Double {
-        records.compactMap { $0.hoursAvoided }.reduce(0, +)
+    var measuredHoursAvoided: Double {
+        records.filter { $0.evidenceBasis == .measured }.compactMap { $0.hoursAvoided }.reduce(0, +)
     }
-    var totalRecurrencesAvoided: Int {
-        records.compactMap { $0.recurrenceCountAvoided }.reduce(0, +)
+    var estimatedHoursAvoided: Double {
+        records.filter { $0.evidenceBasis == .estimated }.compactMap { $0.hoursAvoided }.reduce(0, +)
+    }
+    var measuredRecurrencesAvoided: Int {
+        records.filter { $0.evidenceBasis == .measured }.compactMap { $0.recurrenceCountAvoided }.reduce(0, +)
+    }
+    var estimatedRecurrencesAvoided: Int {
+        records.filter { $0.evidenceBasis == .estimated }.compactMap { $0.recurrenceCountAvoided }.reduce(0, +)
     }
 
     func record(id: UUID) -> PreventionInterventionRecord? {
