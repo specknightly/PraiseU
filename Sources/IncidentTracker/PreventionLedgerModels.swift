@@ -44,6 +44,7 @@ struct PreventionInterventionRecord: Identifiable, Codable, Hashable {
     var observedResult: String = ""
     var measurementBasis: String = ""
     var notes: String = ""
+    var responsibilityScope: ResponsibilityScope?
 
     var recurrenceCountAvoided: Int?
     var hoursAvoided: Double?

@@ -62,6 +62,7 @@ struct OperationalBurdenRecord: Identifiable, Codable, Hashable {
     var impactOnPlannedWork: String = ""
     var measurementBasis: String = ""
     var notes: String = ""
+    var responsibilityScope: ResponsibilityScope?
 
     /// Active minutes consumed by the work itself.
     var durationMinutes: Int?

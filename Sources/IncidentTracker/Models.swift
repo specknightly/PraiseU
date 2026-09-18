@@ -28,6 +28,7 @@ struct IncidentRecord: Identifiable, Codable, Hashable {
     var witnesses: String = ""
     var referenceNumbers: String = ""
     var notes: String = ""
+    var responsibilityScope: ResponsibilityScope?
 
     var aiAnalysis: String = ""
     var neutralFactsDraft: String = ""

@@ -128,6 +128,14 @@ struct IncidentEditorView: View {
                     TextField("Network, Communication, Follow-up", text: $draft.tagsText)
                         .textFieldStyle(.plain)
                 }
+                MetadataBox(title: "Role Scope") {
+                    Picker("", selection: $draft.responsibilityScope) {
+                        Text("Unclassified").tag(Optional<ResponsibilityScope>.none)
+                        Text(ResponsibilityScope.core.rawValue).tag(Optional(ResponsibilityScope.core))
+                        Text(ResponsibilityScope.other.rawValue).tag(Optional(ResponsibilityScope.other))
+                    }
+                    .labelsHidden()
+                }
                 Toggle("Pin this incident", isOn: $draft.isPinned)
                     .toggleStyle(.checkbox)
                     .frame(width: 150, alignment: .leading)

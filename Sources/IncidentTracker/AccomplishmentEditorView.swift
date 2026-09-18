@@ -67,6 +67,12 @@ struct AccomplishmentEditorView: View {
             HStack(spacing: 12) {
                 AccomplishmentMetadataBox(title: "Tags (comma separated)") { TextField("Infrastructure, Project, Leadership", text: $draft.tagsText).textFieldStyle(.plain) }
                 AccomplishmentMetadataBox(title: "Stakeholders") { TextField("Faculty, staff, team, department", text: $draft.stakeholders).textFieldStyle(.plain) }
+                AccomplishmentMetadataBox(title: "Role Scope") {
+                    Picker("", selection: $draft.responsibilityScope) {
+                        ForEach(ResponsibilityScope.allCases) { Text($0.rawValue).tag($0) }
+                    }
+                    .labelsHidden()
+                }
             }
         }
     }

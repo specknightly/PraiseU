@@ -224,6 +224,13 @@ private struct PreventionRecordEditor: View {
                         ForEach(PreventionEvidenceBasis.allCases) { Text($0.rawValue).tag($0) }
                     }.labelsHidden()
                 }
+                ledgerBox("Role Scope") {
+                    Picker("", selection: $draft.responsibilityScope) {
+                        Text("Unclassified").tag(Optional<ResponsibilityScope>.none)
+                        Text(ResponsibilityScope.core.rawValue).tag(Optional(ResponsibilityScope.core))
+                        Text(ResponsibilityScope.other.rawValue).tag(Optional(ResponsibilityScope.other))
+                    }.labelsHidden()
+                }
             }
 
             Text(draft.evidenceBasis.explanation)
