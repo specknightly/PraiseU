@@ -82,8 +82,8 @@ struct AccomplishmentEditorView: View {
             ForEach(AccomplishmentDetailTab.allCases) { item in
                 Button { tab = item } label: {
                     HStack(spacing: 7) { Image(systemName: item.symbol); Text(item == .evidence ? "Evidence (\(draft.evidence.count))" : item.rawValue) }
-                        .font(.system(size: 13, weight: tab == item ? .semibold : .medium)).foregroundStyle(tab == item ? ESTheme.accent : .white.opacity(0.82))
-                        .padding(.bottom, 8).overlay(alignment: .bottom) { Rectangle().fill(tab == item ? ESTheme.accent : Color.clear).frame(height: 2) }
+                        .font(.system(size: 13, weight: tab == item ? .semibold : .medium)).foregroundStyle(tab == item ? ESTheme.gold : ESTheme.textPrimary.opacity(0.76))
+                        .padding(.bottom, 8).overlay(alignment: .bottom) { Rectangle().fill(tab == item ? ESTheme.gold : Color.clear).frame(height: 2) }
                 }.buttonStyle(.plain)
             }
             Spacer()

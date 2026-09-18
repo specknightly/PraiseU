@@ -83,7 +83,7 @@ private struct IncidentListCard: View {
             HStack(alignment: .top, spacing: 13) {
                 Image(systemName: incident.severity.symbol)
                     .font(.system(size: 24, weight: .medium))
-                    .foregroundStyle(incident.severity == .critical || incident.severity == .high ? ESTheme.gold : .white.opacity(0.88))
+                    .foregroundStyle(incident.severity == .critical || incident.severity == .high ? ESTheme.gold : ESTheme.textPrimary.opacity(0.82))
                     .frame(width: 34, height: 34)
 
                 VStack(alignment: .leading, spacing: 7) {
@@ -101,11 +101,11 @@ private struct IncidentListCard: View {
 
                     HStack(spacing: 7) {
                         Text(incident.occurredAt.formatted(date: .abbreviated, time: .omitted))
-                            .foregroundStyle(selected ? .white.opacity(0.80) : ESTheme.muted)
+                            .foregroundStyle(selected ? ESTheme.textPrimary.opacity(0.82) : ESTheme.muted)
                         Text("•")
-                            .foregroundStyle(selected ? .white.opacity(0.50) : ESTheme.muted)
+                            .foregroundStyle(selected ? ESTheme.goldSoft.opacity(0.60) : ESTheme.muted)
                         Text(incident.status.rawValue)
-                            .foregroundStyle(selected ? .white.opacity(0.80) : ESTheme.muted)
+                            .foregroundStyle(selected ? ESTheme.textPrimary.opacity(0.82) : ESTheme.muted)
                     }
                     .font(.system(size: 11))
 
@@ -117,16 +117,16 @@ private struct IncidentListCard: View {
                         if incident.evidence.count > 0 {
                             Label("\(incident.evidence.count)", systemImage: "paperclip")
                                 .font(.system(size: 10, weight: .semibold))
-                                .foregroundStyle(selected ? .white.opacity(0.86) : ESTheme.muted)
+                                .foregroundStyle(selected ? ESTheme.goldSoft : ESTheme.muted)
                         }
                     }
                 }
             }
             .padding(13)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(selected ? ESTheme.accent.opacity(0.68) : ESTheme.panel)
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(selected ? Color.white.opacity(0.09) : ESTheme.border))
+            .background(selected ? ESTheme.selection : ESTheme.panel)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(selected ? ESTheme.borderStrong : ESTheme.border))
         }
         .buttonStyle(.plain)
     }
@@ -141,7 +141,7 @@ private struct TagPill: View {
             .lineLimit(1)
             .padding(.horizontal, 7)
             .padding(.vertical, 4)
-            .background(selected ? .white.opacity(0.16) : ESTheme.panelRaised)
+            .background(selected ? ESTheme.gold.opacity(0.15) : ESTheme.panelRaised)
             .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
     }
 }

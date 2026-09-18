@@ -35,18 +35,18 @@ struct AccomplishmentListView: View {
                                         }
                                         HStack(spacing: 7) {
                                             Text(item.date.formatted(date: .abbreviated, time: .omitted)); Text("•"); Text(item.isDraft ? "Draft" : "Completed")
-                                        }.font(.system(size: 11)).foregroundStyle(selectedID == item.id ? .white.opacity(0.80) : ESTheme.muted)
+                                        }.font(.system(size: 11)).foregroundStyle(selectedID == item.id ? ESTheme.textPrimary.opacity(0.82) : ESTheme.muted)
                                         HStack(spacing: 6) {
                                             accomplishmentPill(item.category.rawValue, selected: selectedID == item.id)
                                             if let tag = item.tags.first { accomplishmentPill(tag, selected: selectedID == item.id) }
-                                            if !item.evidence.isEmpty { Label("\(item.evidence.count)", systemImage: "paperclip").font(.system(size: 10, weight: .semibold)).foregroundStyle(selectedID == item.id ? .white.opacity(0.86) : ESTheme.muted) }
+                                            if !item.evidence.isEmpty { Label("\(item.evidence.count)", systemImage: "paperclip").font(.system(size: 10, weight: .semibold)).foregroundStyle(selectedID == item.id ? ESTheme.goldSoft : ESTheme.muted) }
                                         }
                                     }
                                 }
                                 .padding(13).frame(maxWidth: .infinity, alignment: .leading)
-                                .background(selectedID == item.id ? ESTheme.accent.opacity(0.68) : ESTheme.panel)
-                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(selectedID == item.id ? Color.white.opacity(0.09) : ESTheme.border))
+                                .background(selectedID == item.id ? ESTheme.selection : ESTheme.panel)
+                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(selectedID == item.id ? ESTheme.borderStrong : ESTheme.border))
                             }.buttonStyle(.plain)
                         }
                     }.padding(.horizontal, 10).padding(.bottom, 16)
@@ -57,7 +57,7 @@ struct AccomplishmentListView: View {
 
     private func accomplishmentPill(_ text: String, selected: Bool) -> some View {
         Text(text).font(.system(size: 10, weight: .medium)).lineLimit(1).padding(.horizontal, 7).padding(.vertical, 4)
-            .background(selected ? .white.opacity(0.16) : ESTheme.panelRaised).clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+            .background(selected ? ESTheme.gold.opacity(0.15) : ESTheme.panelRaised).clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
     }
 
     private var title: String {

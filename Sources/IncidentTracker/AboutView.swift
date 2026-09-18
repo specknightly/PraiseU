@@ -15,6 +15,6 @@ struct AboutView: View {
                 Text("Peter Odintsov").font(.title3.bold())
                 Text("Version 1.9.0").font(.caption).foregroundStyle(ESTheme.muted)
             }
-        }.padding(34).frame(width:620,height:470).background(ESTheme.canvas).foregroundStyle(.white)
+        }.padding(34).frame(width:620,height:470).background(ESTheme.canvasGradient).foregroundStyle(ESTheme.textPrimary)
     }
 }
