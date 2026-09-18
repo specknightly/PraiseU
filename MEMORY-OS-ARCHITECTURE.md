@@ -343,3 +343,26 @@ If Entropy Shield can make it safe to forget workplace context without losing de
 The desired outcome is not a better note-taking app.
 
 It is a **trusted external memory system**.
+
+
+## Product specialization: Lumina and WorkRecord
+
+The Entropy Shield ecosystem should not force every application to become a universal memory interface.
+
+**Lumina** is the general-purpose notes/reminders and broad memory surface.
+
+**WorkRecord** is the career-evidence specialization.
+
+WorkRecord should reuse Entropy Shield memory principles only when they improve:
+
+- promotion evidence,
+- accomplishment defensibility,
+- role/responsibility history,
+- incident chronology,
+- CYA documentation,
+- evidence provenance,
+- high-stakes recall.
+
+Prospective reminders, general scratch notes, everyday personal knowledge, and broad second-brain behavior belong primarily in Lumina.
+
+This specialization keeps the shared philosophy coherent without creating duplicate products.

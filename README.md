@@ -2,16 +2,31 @@
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
-Entropy Shield WorkRecord is a local-first macOS application for building an evidence-backed record of your professional value **and** the difficult moments that can put that value into question. It combines two complementary records in one app:
+Entropy Shield WorkRecord is a local-first **career evidence vault** for two things ordinary note apps handle badly:
 
-- **Accomplishments** — what you delivered, improved, automated, protected, recovered, led, or made possible, with evidence you can use in performance reviews and promotion discussions.
-- **Incidents** — factual documentation of workplace events, disputes, failures, escalations, complaints, or other situations where someone may be unhappy with you and an accurate record matters.
+- **Promotion evidence** — what you delivered, improved, automated, protected, recovered, led, or made possible, backed by enough context and evidence to support performance reviews, raises, promotions, title changes, and reclassification discussions.
+- **CYA incident records** — contemporaneous factual documentation of workplace events, disputes, failures, escalations, complaints, or other uncomfortable situations where an accurate chronology and preserved evidence may matter later.
+
+Lumina is the Entropy Shield general notes/reminders application. WorkRecord stays deliberately narrower: **prove the wins and preserve the facts when something goes wrong.**
 
 The goal is simple: help you keep the receipts for your career. In an era where AI can answer many of the hard technical questions instantly and does not ask for a Senior Systems Administrator salary, technical knowledge by itself can increasingly become a “so what?” moment. WorkRecord helps preserve the part AI cannot retroactively reconstruct for you: the evidence of what **you** did, the context and judgment you brought, the impact you created, and the record of what actually happened when your work or decisions are challenged.
 
 WorkRecord uses Apple Intelligence locally on supported Macs to generate conservative, evidence-aware professional and incident insights. Analysis stays on-device through Apple’s Foundation Models framework; the app is designed to avoid remote AI APIs, cloud analytics, and silent AI edits to the underlying record.
 
 Use it to protect two sides of the same career story: **keep your job when the story gets disputed, and build the evidence for the promotion when your work deserves recognition.**
+
+## Product boundary
+
+WorkRecord is not intended to become a general notebook or reminder manager.
+
+Use WorkRecord when the information may need to support one of these future questions:
+
+- **Why should I be promoted, recognized, reclassified, or trusted with more responsibility?**
+- **What exactly happened in this uncomfortable incident, what did I do, and what evidence exists?**
+
+General notes and reminders belong in Lumina.
+
+See [WORKRECORD-PRODUCT-BOUNDARY.md](WORKRECORD-PRODUCT-BOUNDARY.md).
 
 ## Core principles
 
