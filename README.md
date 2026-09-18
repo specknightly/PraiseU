@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v1.4.1
+# Entropy Shield WorkRecord v1.5.0
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
@@ -177,6 +177,23 @@ A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the gen
 **Document the wins. Preserve the facts. Keep the evidence.**
 
 WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v1.5.0 — Relationship-Aware Work Graph
+
+WorkRecord now has a separate local Work Graph that connects the evidence already in the app without rewriting the source record.
+
+- Incidents and accomplishments can be linked directly to each other.
+- Evidence attachments are addressable graph nodes using their existing UUIDs and parent records.
+- People, systems, and projects can be created as first-class named entities.
+- Typed relationships include involvement, impact, support, evidence, project membership, prevention, response, resolution, dependency, and stakeholder context.
+- Every incident and accomplishment editor now has a **Relationships** tab.
+- A global **Relationship Work Graph** browser lets you search nodes, inspect links, and add context.
+- Relationships persist in `WorkGraph/work-graph.json` with rolling local backups.
+- The factual incident/accomplishment databases remain separate from the graph, preserving the distinction between source records and relationship context.
+
+This is the foundation for v1.6.0 Contextual Recall: explicit user-created relationships will be treated as the highest-confidence context before inferred similarity.
+
+See [ROADMAP.md](ROADMAP.md) and [RELEASE-v1.5.0.md](RELEASE-v1.5.0.md).
+
 ## v1.2.0 - Review adversary restored
 The Accomplishments mode now restores on-device Human Value and Professional Intelligence generation and adds a dedicated Review Prep screen. `Challenge My Raise Case` intentionally argues the strongest fair case against a raise/promotion using the year's evidence, then identifies factual responses, questions, and evidence to bring to the meeting. See `PRAISEU-AUDIT-v1.2.0.md` for the full merge audit.
 

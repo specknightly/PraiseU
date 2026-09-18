@@ -36,6 +36,7 @@ struct SettingsView: View {
                 HStack(spacing: 18) {
                     Label("\(validation.incidentCount) incidents", systemImage: "exclamationmark.triangle")
                     Label("\(validation.accomplishmentCount) accomplishments", systemImage: "trophy")
+                    Label("\(workGraphStore.links.count) graph links", systemImage: "link")
                     Label(ByteCountFormatter.string(fromByteCount: validation.totalBytes, countStyle: .file), systemImage: "externaldrive")
                 }.font(.caption).foregroundStyle(.secondary)
                 Text(validation.message).font(.caption).foregroundStyle(validation.isValid ? ESTheme.gold : .red)
