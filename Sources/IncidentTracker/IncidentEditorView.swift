@@ -31,6 +31,8 @@ struct IncidentEditorView: View {
                             EvidenceTabView(incidentID: draft.id)
                         case .ai:
                             IncidentAIView(draft: $draft)
+                        case .recall:
+                            ContextualRecallView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
                         case .relationships:
                             RelationshipEditorView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
                         case .notes:

@@ -25,6 +25,7 @@ struct AccomplishmentEditorView: View {
                     case .details: detailsTab
                     case .evidence: AccomplishmentEvidenceView(accomplishmentID: draft.id)
                     case .intelligence: intelligenceTab
+                    case .recall: ContextualRecallView(subject: WorkGraphNodeRef(kind: .accomplishment, nodeID: draft.id))
                     case .relationships: RelationshipEditorView(subject: WorkGraphNodeRef(kind: .accomplishment, nodeID: draft.id))
                     case .notes: notesTab
                     }

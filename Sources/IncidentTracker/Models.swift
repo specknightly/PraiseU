@@ -133,6 +133,7 @@ enum DetailTab: String, CaseIterable, Identifiable {
     case details = "Details"
     case evidence = "Evidence"
     case ai = "Incident AI"
+    case recall = "Related History"
     case relationships = "Relationships"
     case notes = "Notes"
 
@@ -142,6 +143,7 @@ enum DetailTab: String, CaseIterable, Identifiable {
         case .details: return "doc.text"
         case .evidence: return "paperclip"
         case .ai: return "sparkles"
+        case .recall: return "clock.arrow.circlepath"
         case .relationships: return "link"
         case .notes: return "note.text"
         }
