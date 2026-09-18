@@ -46,6 +46,8 @@ Planned capabilities:
 
 ## v1.7.0 — Prevention & Intervention Ledger
 
+**Status:** Implemented in v1.7.0.
+
 **Goal:** Quantify work that prevents future problems.
 
 - Record preventive action, intervention type, risk avoided, recurrence avoided, and confidence.

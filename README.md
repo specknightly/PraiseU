@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v1.6.0
+# Entropy Shield WorkRecord v1.7.0
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
@@ -177,6 +177,23 @@ A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the gen
 **Document the wins. Preserve the facts. Keep the evidence.**
 
 WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v1.7.0 — Prevention & Intervention Ledger
+
+WorkRecord now captures the work whose success often looks like “nothing happened.”
+
+- New **Prevention & Intervention Ledger** stored separately from incidents, accomplishments, and the Work Graph.
+- Track prevention, mitigation, early detection, hardening, automation, documentation, training, monitoring, process changes, and technical-debt cleanup.
+- Every intervention records the risk/failure mode addressed, expected consequence, observed result, and evidence basis.
+- Evidence basis is explicitly **Measured**, **Estimated**, or **Inferred**.
+- Inferred entries cannot retain numeric avoided-impact claims.
+- Measured and estimated avoided hours and recurrence counts are totaled separately.
+- Prevention entries can link to incidents, accomplishments, evidence, people, systems, and projects.
+- Every incident and accomplishment now has a **Prevention** tab.
+- Local Apple Intelligence can summarize the prevention portfolio while preserving measured/estimated/inferred distinctions.
+- WorkRecord does not manufacture avoided-dollar values from time estimates.
+
+See [RELEASE-v1.7.0.md](RELEASE-v1.7.0.md).
+
 ## v1.6.0 — Contextual Recall Engine
 
 WorkRecord can now retrieve the most relevant historical records while you are reviewing an incident or accomplishment.
