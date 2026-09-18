@@ -33,6 +33,7 @@ struct IncidentTrackerApp: App {
             SettingsView()
                 .environmentObject(incidentStore)
                 .environmentObject(accomplishmentStore)
+                .environmentObject(workGraphStore)
         }
     }
 }

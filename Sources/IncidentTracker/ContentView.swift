@@ -11,6 +11,7 @@ enum TrackerMode: String, CaseIterable, Identifiable {
 struct ContentView: View {
     @EnvironmentObject private var incidentStore: IncidentStore
     @EnvironmentObject private var accomplishmentStore: AccomplishmentStore
+    @EnvironmentObject private var workGraphStore: WorkGraphStore
     @Environment(\.openSettings) private var openSettings
 
     @State private var mode: TrackerMode = .incidents
@@ -25,6 +26,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var showingAbout = false
     @State private var showingWorkIntelligence = false
+    @State private var showingWorkGraph = false
     @AppStorage("appleMailAutoScan") private var appleMailAutoScan = false
     @AppStorage("evidenceMailAccount") private var evidenceMailAccount = ""
     @AppStorage("evidenceMailPath") private var evidenceMailPath = ""
@@ -46,16 +48,34 @@ struct ContentView: View {
         .onOpenURL { url in if let record = AccomplishmentIntakeService.ingest(url: url, store: accomplishmentStore) { mode = .accomplishments; accomplishmentSelection = .all; selectedAccomplishmentID = record.id } }
         .sheet(isPresented: $showingAbout) { AboutView() }
         .sheet(isPresented: $showingWorkIntelligence) { UnifiedWorkIntelligenceView().environmentObject(incidentStore).environmentObject(accomplishmentStore) }
+        .sheet(isPresented: $showingWorkGraph) {
+            WorkGraphView()
+                .environmentObject(incidentStore)
+                .environmentObject(accomplishmentStore)
+                .environmentObject(workGraphStore)
+        }
         .onChange(of: incidentSelection) { _, _ in repairIncidentSelection() }
         .onChange(of: accomplishmentSelection) { _, _ in repairAccomplishmentSelection() }
         .onChange(of: searchText) { _, _ in repairIncidentSelection(); repairAccomplishmentSelection() }
         .onChange(of: incidentStore.incidents) { _, _ in repairIncidentSelection() }
         .onChange(of: accomplishmentStore.accomplishments) { _, _ in repairAccomplishmentSelection() }
         .alert("Entropy Shield", isPresented: Binding(
-            get: { incidentStore.lastError != nil || accomplishmentStore.lastError != nil },
-            set: { if !$0 { incidentStore.lastError = nil; accomplishmentStore.lastError = nil } }
-        )) { Button("OK") { incidentStore.lastError = nil; accomplishmentStore.lastError = nil } }
-        message: { Text(incidentStore.lastError ?? accomplishmentStore.lastError ?? "") }
+            get: { incidentStore.lastError != nil || accomplishmentStore.lastError != nil || workGraphStore.lastError != nil },
+            set: {
+                if !$0 {
+                    incidentStore.lastError = nil
+                    accomplishmentStore.lastError = nil
+                    workGraphStore.lastError = nil
+                }
+            }
+        )) {
+            Button("OK") {
+                incidentStore.lastError = nil
+                accomplishmentStore.lastError = nil
+                workGraphStore.lastError = nil
+            }
+        }
+        message: { Text(incidentStore.lastError ?? accomplishmentStore.lastError ?? workGraphStore.lastError ?? "") }
     }
 
     private var topBar: some View {
@@ -81,6 +101,7 @@ struct ContentView: View {
 
             Menu {
                 Button("Work Intelligence") { showingWorkIntelligence = true }
+                Button("Relationship Work Graph") { showingWorkGraph = true }
                 Divider()
                 Button("Settings…") { openSettings() }
                 Button("About Entropy Shield Work Record") { showingAbout = true }
@@ -146,6 +167,7 @@ struct ContentView: View {
             StatusMetric(symbol: "exclamationmark.circle", text: "\(incidentStore.openCount) Open")
             StatusMetric(symbol: "checkmark.circle", text: "\(incidentStore.resolvedCount) Resolved")
             StatusMetric(symbol: "sparkles", text: "\(incidentStore.aiEnrichedCount) AI Enriched", gold: true)
+            StatusMetric(symbol: "link", text: "\(workGraphStore.links.count) Graph Links", gold: true)
             Spacer()
             Button { ExportService.exportReviewPacket(filteredIncidents, store: incidentStore) } label: { Label("Export Review Packet", systemImage: "doc.badge.arrow.up") }
                 .buttonStyle(.borderedProminent).tint(ESTheme.accent)
@@ -160,6 +182,7 @@ struct ContentView: View {
             StatusMetric(symbol: "checkmark.circle", text: "\(accomplishmentStore.completedCount) Completed")
             StatusMetric(symbol: "paperclip", text: "\(accomplishmentStore.evidenceCount) Evidence")
             StatusMetric(symbol: "sparkles", text: "\(accomplishmentStore.enrichedCount) Enriched", gold: true)
+            StatusMetric(symbol: "link", text: "\(workGraphStore.links.count) Graph Links", gold: true)
             Spacer()
             Button { AccomplishmentExportService.exportReviewPacket(filteredAccomplishments, store: accomplishmentStore) } label: { Label("Export Accomplishment Review", systemImage: "doc.badge.arrow.up") }
                 .buttonStyle(.borderedProminent).tint(ESTheme.accent)

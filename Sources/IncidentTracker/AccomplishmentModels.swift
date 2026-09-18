@@ -139,6 +139,7 @@ enum AccomplishmentDetailTab: String, CaseIterable, Identifiable {
     case details = "Details"
     case evidence = "Evidence"
     case intelligence = "Value Intelligence"
+    case relationships = "Relationships"
     case notes = "Notes"
     var id: String { rawValue }
     var symbol: String {
@@ -146,6 +147,7 @@ enum AccomplishmentDetailTab: String, CaseIterable, Identifiable {
         case .details: return "doc.text"
         case .evidence: return "paperclip"
         case .intelligence: return "sparkles"
+        case .relationships: return "link"
         case .notes: return "note.text"
         }
     }
