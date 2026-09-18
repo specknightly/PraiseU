@@ -13,6 +13,7 @@ struct ContentView: View {
     @EnvironmentObject private var accomplishmentStore: AccomplishmentStore
     @EnvironmentObject private var workGraphStore: WorkGraphStore
     @EnvironmentObject private var preventionLedgerStore: PreventionLedgerStore
+    @EnvironmentObject private var operationalBurdenStore: OperationalBurdenStore
     @Environment(\.openSettings) private var openSettings
 
     @State private var mode: TrackerMode = .incidents
@@ -29,6 +30,7 @@ struct ContentView: View {
     @State private var showingWorkIntelligence = false
     @State private var showingWorkGraph = false
     @State private var showingPreventionLedger = false
+    @State private var showingOperationalBurden = false
     @AppStorage("appleMailAutoScan") private var appleMailAutoScan = false
     @AppStorage("evidenceMailAccount") private var evidenceMailAccount = ""
     @AppStorage("evidenceMailPath") private var evidenceMailPath = ""
@@ -64,19 +66,29 @@ struct ContentView: View {
                 .environmentObject(preventionLedgerStore)
                 .frame(minWidth: 1100, minHeight: 760)
         }
+        .sheet(isPresented: $showingOperationalBurden) {
+            OperationalBurdenView()
+                .environmentObject(incidentStore)
+                .environmentObject(accomplishmentStore)
+                .environmentObject(workGraphStore)
+                .environmentObject(operationalBurdenStore)
+                .frame(minWidth: 1140, minHeight: 780)
+        }
         .onChange(of: incidentSelection) { _, _ in repairIncidentSelection() }
         .onChange(of: accomplishmentSelection) { _, _ in repairAccomplishmentSelection() }
         .onChange(of: searchText) { _, _ in repairIncidentSelection(); repairAccomplishmentSelection() }
         .onChange(of: incidentStore.incidents) { _, _ in repairIncidentSelection() }
         .onChange(of: accomplishmentStore.accomplishments) { _, _ in repairAccomplishmentSelection() }
         .alert("Entropy Shield", isPresented: Binding(
-            get: { incidentStore.lastError != nil || accomplishmentStore.lastError != nil || workGraphStore.lastError != nil || preventionLedgerStore.lastError != nil },
+            get: { incidentStore.lastError != nil || accomplishmentStore.lastError != nil || workGraphStore.lastError != nil || preventionLedgerStore.lastError != nil || operationalBurdenStore.lastError != nil },
             set: {
                 if !$0 {
                     incidentStore.lastError = nil
                     accomplishmentStore.lastError = nil
                     workGraphStore.lastError = nil
                     preventionLedgerStore.lastError = nil
+                operationalBurdenStore.lastError = nil
+                    operationalBurdenStore.lastError = nil
                 }
             }
         )) {
@@ -87,7 +99,7 @@ struct ContentView: View {
                 preventionLedgerStore.lastError = nil
             }
         }
-        message: { Text(incidentStore.lastError ?? accomplishmentStore.lastError ?? workGraphStore.lastError ?? preventionLedgerStore.lastError ?? "") }
+        message: { Text(incidentStore.lastError ?? accomplishmentStore.lastError ?? workGraphStore.lastError ?? preventionLedgerStore.lastError ?? operationalBurdenStore.lastError ?? "") }
     }
 
     private var topBar: some View {
@@ -115,6 +127,7 @@ struct ContentView: View {
                 Button("Work Intelligence") { showingWorkIntelligence = true }
                 Button("Relationship Work Graph") { showingWorkGraph = true }
                 Button("Prevention & Intervention Ledger") { showingPreventionLedger = true }
+                Button("Operational Burden Intelligence") { showingOperationalBurden = true }
                 Divider()
                 Button("Settings…") { openSettings() }
                 Button("About Entropy Shield Work Record") { showingAbout = true }
@@ -182,6 +195,7 @@ struct ContentView: View {
             StatusMetric(symbol: "sparkles", text: "\(incidentStore.aiEnrichedCount) AI Enriched", gold: true)
             StatusMetric(symbol: "link", text: "\(workGraphStore.links.count) Graph Links", gold: true)
             StatusMetric(symbol: "shield.checkered", text: "\(preventionLedgerStore.totalCount) Prevention")
+            StatusMetric(symbol: "gauge.with.dots.needle.50percent", text: "\(operationalBurdenStore.totalCount) Burden")
             Spacer()
             Button { ExportService.exportReviewPacket(filteredIncidents, store: incidentStore) } label: { Label("Export Review Packet", systemImage: "doc.badge.arrow.up") }
                 .buttonStyle(.borderedProminent).tint(ESTheme.accent)
@@ -198,6 +212,7 @@ struct ContentView: View {
             StatusMetric(symbol: "sparkles", text: "\(accomplishmentStore.enrichedCount) Enriched", gold: true)
             StatusMetric(symbol: "link", text: "\(workGraphStore.links.count) Graph Links", gold: true)
             StatusMetric(symbol: "shield.checkered", text: "\(preventionLedgerStore.totalCount) Prevention")
+            StatusMetric(symbol: "gauge.with.dots.needle.50percent", text: "\(operationalBurdenStore.totalCount) Burden")
             Spacer()
             Button { AccomplishmentExportService.exportReviewPacket(filteredAccomplishments, store: accomplishmentStore) } label: { Label("Export Accomplishment Review", systemImage: "doc.badge.arrow.up") }
                 .buttonStyle(.borderedProminent).tint(ESTheme.accent)

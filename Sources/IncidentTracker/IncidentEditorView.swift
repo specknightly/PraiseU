@@ -36,6 +36,9 @@ struct IncidentEditorView: View {
                         case .prevention:
                             PreventionLedgerView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
                                 .frame(minHeight: 560)
+                        case .burden:
+                            OperationalBurdenView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
+                                .frame(minHeight: 580)
                         case .relationships:
                             RelationshipEditorView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
                         case .notes:
