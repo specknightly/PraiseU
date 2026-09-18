@@ -109,9 +109,37 @@ struct ContentView: View {
                 Text(mode == .incidents ? "Document Today. Defend Tomorrow." : "Document Today. Demonstrate Tomorrow.").font(.system(size: 13, weight: .medium)).foregroundStyle(ESTheme.muted)
             }.frame(width: 300, alignment: .leading)
 
-            Picker("Mode", selection: $mode) {
-                ForEach(TrackerMode.allCases) { item in Label(item.rawValue, systemImage: item.symbol).tag(item) }
-            }.pickerStyle(.segmented).frame(width: 300)
+            HStack(spacing: 4) {
+                ForEach(TrackerMode.allCases) { item in
+                    Button {
+                        guard mode != item else { return }
+                        mode = item
+                        searchText = ""
+                        if item == .incidents {
+                            repairIncidentSelection()
+                        } else {
+                            repairAccomplishmentSelection()
+                        }
+                    } label: {
+                        Label(item.rawValue, systemImage: item.symbol)
+                            .font(.system(size: 12, weight: .semibold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 7)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(mode == item ? .white : ESTheme.muted)
+                    .background(mode == item ? ESTheme.accent : ESTheme.panelRaised)
+                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                    .accessibilityLabel("Switch to \(item.rawValue)")
+                    .accessibilityAddTraits(mode == item ? .isSelected : [])
+                }
+            }
+            .padding(3)
+            .frame(width: 300)
+            .background(ESTheme.panel)
+            .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 9).stroke(ESTheme.border))
 
             HStack(spacing: 9) {
                 Image(systemName: "magnifyingglass").foregroundStyle(ESTheme.muted)
