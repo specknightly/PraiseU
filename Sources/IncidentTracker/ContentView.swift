@@ -33,6 +33,8 @@ struct ContentView: View {
     @State private var showingPreventionLedger = false
     @State private var showingOperationalBurden = false
     @State private var showingResponsibilityDrift = false
+    @State private var showingWorkAssistant = false
+    @State private var assistantSubject: WorkGraphNodeRef?
     @AppStorage("appleMailAutoScan") private var appleMailAutoScan = false
     @AppStorage("evidenceMailAccount") private var evidenceMailAccount = ""
     @AppStorage("evidenceMailPath") private var evidenceMailPath = ""
@@ -78,6 +80,15 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingResponsibilityDrift) {
             ResponsibilityDriftView()
+                .environmentObject(incidentStore)
+                .environmentObject(accomplishmentStore)
+                .environmentObject(workGraphStore)
+                .environmentObject(preventionLedgerStore)
+                .environmentObject(operationalBurdenStore)
+                .environmentObject(responsibilityDriftStore)
+        }
+        .sheet(isPresented: $showingWorkAssistant) {
+            WorkIntelligenceAssistantView(subject: assistantSubject)
                 .environmentObject(incidentStore)
                 .environmentObject(accomplishmentStore)
                 .environmentObject(workGraphStore)
@@ -164,8 +175,38 @@ struct ContentView: View {
 
             Spacer()
 
+            Button {
+                assistantSubject = nil
+                showingWorkAssistant = true
+            } label: {
+                Image(systemName: "sparkles.rectangle.stack")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(ESTheme.gold)
+            }
+            .buttonStyle(.plain)
+            .help("Work Intelligence Assistant")
+
             Menu {
-                Button("Work Intelligence") { showingWorkIntelligence = true }
+                Button("Work Intelligence Assistant") {
+                    assistantSubject = nil
+                    showingWorkAssistant = true
+                }
+                Button("Ask Assistant About Current Record") {
+                    if mode == .incidents, let id = selectedIncidentID {
+                        assistantSubject = WorkGraphNodeRef(kind: .incident, nodeID: id)
+                    } else if mode == .accomplishments, let id = selectedAccomplishmentID {
+                        assistantSubject = WorkGraphNodeRef(kind: .accomplishment, nodeID: id)
+                    } else {
+                        assistantSubject = nil
+                    }
+                    showingWorkAssistant = assistantSubject != nil
+                }
+                .disabled(
+                    (mode == .incidents && selectedIncidentID == nil) ||
+                    (mode == .accomplishments && selectedAccomplishmentID == nil)
+                )
+                Divider()
+                Button("Annual Work Intelligence Report") { showingWorkIntelligence = true }
                 Button("Relationship Work Graph") { showingWorkGraph = true }
                 Button("Prevention & Intervention Ledger") { showingPreventionLedger = true }
                 Button("Operational Burden Intelligence") { showingOperationalBurden = true }
