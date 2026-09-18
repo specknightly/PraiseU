@@ -269,6 +269,7 @@ enum ResponsibilityDriftEngine {
         }
 
         return supports.compactMap { ref, items in
+            guard items.count >= 2 else { return nil }
             guard let node = catalog.first(where: { $0.ref == ref }) else { return nil }
             let sorted = items.sorted { $0.date < $1.date }
             guard let first = sorted.first, let last = sorted.last else { return nil }

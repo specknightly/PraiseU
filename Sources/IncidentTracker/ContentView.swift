@@ -145,7 +145,7 @@ struct ContentView: View {
                     .background(mode == item ? ESTheme.accent : ESTheme.panelRaised)
                     .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
                     .accessibilityLabel("Switch to \(item.rawValue)")
-                    .accessibilityAddTraits(mode == item ? .isSelected : [])
+                    .accessibilityValue(mode == item ? "Selected" : "Not selected")
                 }
             }
             .padding(3)
