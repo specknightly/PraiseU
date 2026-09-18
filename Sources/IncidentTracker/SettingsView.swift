@@ -5,6 +5,7 @@ struct SettingsView: View {
     @EnvironmentObject private var incidentStore: IncidentStore
     @EnvironmentObject private var accomplishmentStore: AccomplishmentStore
     @EnvironmentObject private var workGraphStore: WorkGraphStore
+    @EnvironmentObject private var preventionLedgerStore: PreventionLedgerStore
 
     @AppStorage("coreRoleDefinition") private var coreRoleDefinition = "Password resets, routine account access, basic desktop support, and other duties explicitly assigned to my primary IT support role."
     @AppStorage("expectedOtherPercent") private var expectedOtherPercent = 10.0
@@ -23,7 +24,7 @@ struct SettingsView: View {
                 LabeledContent("Current repository") {
                     Text(WorkRecordStorage.rootURL.path).font(.caption.monospaced()).textSelection(.enabled)
                 }
-                Text("Incidents, accomplishments, evidence files, Work Graph relationships, backups, and the Evidence Inbox are kept under this single repository root.")
+                Text("Incidents, accomplishments, evidence files, Work Graph relationships, Prevention Ledger records, backups, and the Evidence Inbox are kept under this single repository root.")
                     .font(.callout).foregroundStyle(.secondary)
                 HStack {
                     Button("Reveal in Finder") { WorkRecordStorage.revealCurrentRoot() }
@@ -37,6 +38,7 @@ struct SettingsView: View {
                     Label("\(validation.incidentCount) incidents", systemImage: "exclamationmark.triangle")
                     Label("\(validation.accomplishmentCount) accomplishments", systemImage: "trophy")
                     Label("\(workGraphStore.links.count) graph links", systemImage: "link")
+                    Label("\(preventionLedgerStore.totalCount) prevention records", systemImage: "shield.checkered")
                     Label(ByteCountFormatter.string(fromByteCount: validation.totalBytes, countStyle: .file), systemImage: "externaldrive")
                 }.font(.caption).foregroundStyle(.secondary)
                 Text(validation.message).font(.caption).foregroundStyle(validation.isValid ? ESTheme.gold : .red)
@@ -110,5 +112,6 @@ struct SettingsView: View {
         incidentStore.reloadFromStorage()
         accomplishmentStore.reloadFromStorage()
         workGraphStore.reloadFromStorage()
+        preventionLedgerStore.reloadFromStorage()
     }
 }

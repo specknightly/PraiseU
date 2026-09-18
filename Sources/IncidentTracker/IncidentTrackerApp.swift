@@ -5,6 +5,7 @@ struct IncidentTrackerApp: App {
     @StateObject private var incidentStore = IncidentStore()
     @StateObject private var accomplishmentStore = AccomplishmentStore()
     @StateObject private var workGraphStore = WorkGraphStore()
+    @StateObject private var preventionLedgerStore = PreventionLedgerStore()
     @AppStorage("showMenuBarQuickCapture") private var showMenuBarQuickCapture = true
 
     var body: some Scene {
@@ -13,6 +14,7 @@ struct IncidentTrackerApp: App {
                 .environmentObject(incidentStore)
                 .environmentObject(accomplishmentStore)
                 .environmentObject(workGraphStore)
+                .environmentObject(preventionLedgerStore)
                 .frame(minWidth: 1180, minHeight: 760)
         }
         .commands {
@@ -28,6 +30,7 @@ struct IncidentTrackerApp: App {
             QuickCaptureView()
                 .environmentObject(accomplishmentStore)
                 .environmentObject(workGraphStore)
+                .environmentObject(preventionLedgerStore)
         }
         Settings {
             SettingsView()

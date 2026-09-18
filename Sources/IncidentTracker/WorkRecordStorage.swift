@@ -28,6 +28,9 @@ enum WorkRecordStorage {
     static var workGraphRootURL: URL { rootURL.appendingPathComponent("WorkGraph", isDirectory: true) }
     static var workGraphURL: URL { workGraphRootURL.appendingPathComponent("work-graph.json") }
     static var workGraphBackupsURL: URL { workGraphRootURL.appendingPathComponent("Backups", isDirectory: true) }
+    static var preventionLedgerRootURL: URL { rootURL.appendingPathComponent("PreventionLedger", isDirectory: true) }
+    static var preventionLedgerURL: URL { preventionLedgerRootURL.appendingPathComponent("prevention-ledger.json") }
+    static var preventionLedgerBackupsURL: URL { preventionLedgerRootURL.appendingPathComponent("Backups", isDirectory: true) }
 
     static func prepareRoot(_ root: URL = rootURL) throws {
         let fm = FileManager.default
@@ -43,6 +46,9 @@ enum WorkRecordStorage {
         let workGraph = root.appendingPathComponent("WorkGraph", isDirectory: true)
         try fm.createDirectory(at: workGraph, withIntermediateDirectories: true)
         try fm.createDirectory(at: workGraph.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
+        let prevention = root.appendingPathComponent("PreventionLedger", isDirectory: true)
+        try fm.createDirectory(at: prevention, withIntermediateDirectories: true)
+        try fm.createDirectory(at: prevention.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
     }
 
     struct ValidationResult {
@@ -89,6 +95,17 @@ enum WorkRecordStorage {
             } catch {
                 valid = false
                 notes.append("work-graph.json could not be decoded")
+            }
+        }
+
+        let preventionLedger = root.appendingPathComponent("PreventionLedger/prevention-ledger.json")
+        if fm.fileExists(atPath: preventionLedger.path) {
+            do {
+                let data = try Data(contentsOf: preventionLedger)
+                _ = try JSONDecoder.incidentDecoder.decode(PreventionLedgerDatabase.self, from: data)
+            } catch {
+                valid = false
+                notes.append("prevention-ledger.json could not be decoded")
             }
         }
 
