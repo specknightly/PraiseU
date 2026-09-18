@@ -28,7 +28,7 @@ struct SettingsView: View {
                 LabeledContent("Current repository") {
                     Text(WorkRecordStorage.rootURL.path).font(.caption.monospaced()).textSelection(.enabled)
                 }
-                Text("Incidents, accomplishments, evidence files, Work Graph relationships, Prevention Ledger records, Operational Burden records, backups, and the Evidence Inbox are kept under this single local repository root.")
+                Text("Incidents, accomplishments, evidence files, Work Graph relationships, Prevention Ledger records, Operational Burden records, Responsibility Drift role baselines, backups, and the Evidence Inbox are kept under this single local repository root.")
                     .font(.callout).foregroundStyle(.secondary)
                 HStack {
                     Button("Reveal in Finder") { WorkRecordStorage.revealCurrentRoot() }

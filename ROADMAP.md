@@ -68,6 +68,8 @@ Planned capabilities:
 
 ## v1.9.0 — Responsibility Drift Observatory
 
+**Status:** Implemented in v1.9.0.
+
 **Goal:** Prove how the real job diverges from the job description.
 
 - Compare work graph evidence to the user's role baseline.

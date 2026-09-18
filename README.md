@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v1.8.0
+# Entropy Shield WorkRecord v1.9.0
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
@@ -177,6 +177,24 @@ A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the gen
 **Document the wins. Preserve the facts. Keep the evidence.**
 
 WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v1.9.0 — Responsibility Drift Observatory
+
+WorkRecord can now compare documented work against a dated role baseline and show how the real job diverges from the written job.
+
+- Replaced the unreliable macOS segmented Mode picker with explicit **Incidents** and **Accomplishments** buttons.
+- Save versioned role-baseline snapshots with role title, role definition, effective date, and expected adjacent-work allowance.
+- Incidents, accomplishments, prevention records, and operational-burden records can all be explicitly classified as **Core Role**, **Other / Scope Drift**, or **Unclassified**.
+- The Observatory shows a month-by-month drift timeline using classified evidence.
+- Record-count percentages are labeled as **evidence mix**, not time allocation.
+- Measured and estimated out-of-role burden remain separate.
+- Repeated links to systems/projects create inspectable de facto ownership signals without claiming formal accountability.
+- Higher-level out-of-role accomplishments are surfaced separately from simple record volume.
+- Export an evidence-backed Responsibility Drift packet for role/title, staffing, compensation, promotion, or reclassification discussions.
+- Local Apple Intelligence can build a skeptical review brief while preserving the difference between fact, user classification, measurement, estimate, and inference.
+- If no dated role baseline exists, the Observatory clearly identifies the current Settings baseline as unsnapshotted instead of presenting it as historical fact.
+
+See [RELEASE-v1.9.0.md](RELEASE-v1.9.0.md).
+
 ## v1.8.0 — Operational Burden Intelligence
 
 WorkRecord can now measure where operational time and attention are actually going.
