@@ -373,7 +373,7 @@ enum WorkIntelligenceRetrievalEngine {
         return deduped
     }
 
-    static func packet(
+    nonisolated static func packet(
         question: String,
         sources: [WorkIntelligenceSource],
         maxCharacters: Int = 22000
