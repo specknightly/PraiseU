@@ -1,0 +1,36 @@
+# Build products
+.build/
+build/
+DerivedData/
+.DS_Store
+
+# Entropy Shield WorkRecord runtime data
+# Career records and evidence are local user data and must never be committed.
+incidents.json
+Evidence/
+Backups/
+Evidence Inbox/
+
+Accomplishments/accomplishments.json
+Accomplishments/Evidence/
+Accomplishments/Backups/
+
+WorkGraph/work-graph.json
+WorkGraph/Backups/
+
+PreventionLedger/prevention-ledger.json
+PreventionLedger/Backups/
+
+OperationalBurden/operational-burden.json
+OperationalBurden/Backups/
+
+# Common evidence/document formats should not be added to this source repository.
+*.eml
+*.msg
+*.mbox
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.csv
