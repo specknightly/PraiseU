@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v1.5.0
+# Entropy Shield WorkRecord v1.6.0
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
@@ -177,6 +177,23 @@ A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the gen
 **Document the wins. Preserve the facts. Keep the evidence.**
 
 WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v1.6.0 — Contextual Recall Engine
+
+WorkRecord can now retrieve the most relevant historical records while you are reviewing an incident or accomplishment.
+
+- Every incident and accomplishment has a **Related History** tab.
+- Explicit Work Graph relationships receive the strongest recall weight.
+- Shared people, systems, projects, and evidence act as high-confidence bridge signals.
+- Shared tags, category, date proximity, and bounded lexical similarity provide supporting recall signals.
+- Every result displays its recall score, confidence class, and the specific reasons it was retrieved.
+- Users choose which recalled records enter an **AI Context Preview**.
+- The preview is bounded to keep local Apple Intelligence context predictable.
+- Apple Intelligence receives recalled history only after an explicit **Analyze Selected Context** action.
+- Recall scores are ranking metadata and are explicitly not treated as evidence of causation.
+- Context analysis is on-device, non-evidentiary, and is not silently written into the source record.
+
+See [RELEASE-v1.6.0.md](RELEASE-v1.6.0.md).
+
 ## v1.5.0 — Relationship-Aware Work Graph
 
 WorkRecord now has a separate local Work Graph that connects the evidence already in the app without rewriting the source record.

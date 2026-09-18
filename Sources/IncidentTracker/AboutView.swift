@@ -13,7 +13,7 @@ struct AboutView: View {
             VStack(spacing:4) {
                 Text("Developed by").foregroundStyle(ESTheme.muted)
                 Text("Peter Odintsov").font(.title3.bold())
-                Text("Version 1.5.0").font(.caption).foregroundStyle(ESTheme.muted)
+                Text("Version 1.6.0").font(.caption).foregroundStyle(ESTheme.muted)
             }
         }.padding(34).frame(width:620,height:470).background(ESTheme.canvas).foregroundStyle(.white)
     }

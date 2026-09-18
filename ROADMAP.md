@@ -34,6 +34,8 @@ Planned capabilities:
 
 ## v1.6.0 — Contextual Recall Engine
 
+**Status:** Implemented in v1.6.0.
+
 **Goal:** Retrieve the right historical context automatically.
 
 - Rank related graph nodes by explicit links, shared entities, systems, projects, time, tags, and semantic relevance.
