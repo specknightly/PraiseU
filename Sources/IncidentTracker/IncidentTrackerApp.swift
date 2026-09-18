@@ -30,7 +30,15 @@ struct IncidentTrackerApp: App {
         }
         .commands {
             CommandGroup(replacing: .newItem) {
-                Button("New Accomplishment") { _ = accomplishmentStore.createAccomplishment() }.keyboardShortcut("n", modifiers:[.command,.shift])
+                Button("Record Win") {
+                    _ = accomplishmentStore.createAccomplishment()
+                }
+                .keyboardShortcut("w", modifiers: [.command, .shift])
+
+                Button("Document Incident") {
+                    _ = incidentStore.createIncident()
+                }
+                .keyboardShortcut("i", modifiers: [.command, .shift])
             }
         }
         MenuBarExtra(
@@ -40,7 +48,7 @@ struct IncidentTrackerApp: App {
         ) {
             QuickCaptureView()
                 .environmentObject(accomplishmentStore)
-                .environmentObject(workGraphStore)
+                .environmentObject(incidentStore)
                 .preferredColorScheme(.dark)
                 .tint(ESTheme.accent)
         }

@@ -129,8 +129,15 @@ struct ContentView: View {
     private var topBar: some View {
         HStack(spacing: 18) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(mode == .incidents ? "Incident Tracker" : "Accomplishment Tracker").font(.system(size: 23, weight: .bold))
-                Text(mode == .incidents ? "Document Today. Defend Tomorrow." : "Document Today. Demonstrate Tomorrow.").font(.system(size: 13, weight: .medium)).foregroundStyle(ESTheme.muted)
+                Text(mode == .incidents ? "CYA Incident Record" : "Promotion Evidence").font(.system(size: 23, weight: .bold))
+                Text(
+                    mode == .incidents
+                        ? "Capture uncomfortable facts while they are fresh. Keep the evidence."
+                        : "Record the win while the impact is fresh. Build the promotion case over time."
+                )
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(ESTheme.muted)
+                .lineLimit(1)
             }.frame(width: 300, alignment: .leading)
 
             HStack(spacing: 4) {
@@ -227,7 +234,7 @@ struct ContentView: View {
                     let record = accomplishmentStore.createAccomplishment(); accomplishmentSelection = .all; selectedAccomplishmentID = record.id
                 }
             } label: {
-                Label(mode == .incidents ? "New Incident" : "New Accomplishment", systemImage: "plus").font(.system(size: 14, weight: .semibold)).padding(.horizontal, 8)
+                Label(mode == .incidents ? "Document Incident" : "Record Win", systemImage: "plus").font(.system(size: 14, weight: .semibold)).padding(.horizontal, 8)
             }.buttonStyle(.borderedProminent).controlSize(.large).tint(ESTheme.accent).keyboardShortcut("n", modifiers: [.command])
                 .shadow(color: ESTheme.gold.opacity(0.12), radius: 12, x: 0, y: 4)
         }
