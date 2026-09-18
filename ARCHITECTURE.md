@@ -1,101 +1,69 @@
-# Architecture
+# Architecture Notes
 
-## Product boundary
+## Design inversion from Accomplishment Tracker
 
-Accomplishment Tracker v1.8.1 is a **standalone professional-evidence module**. It does not contain the Entropy Shield Workload Evidence/Gantt module, Calendar workload integration, Dashboard Harness, or Incident Tracker.
+The Accomplishment Tracker asks: **What did I accomplish, what value did it create, and what proves it?**
 
-The application is organized around four concerns:
+Incident Tracker asks: **What happened, what was the impact, how did I respond, what proves the record, and what remains unresolved?**
 
-1. **Capture**: manual entry, evidence files, Evidence Inbox, Apple Mail, JSON, and local URL capture.
-2. **Evidence**: durable local records and copied supporting artifacts.
-3. **Inference**: bounded local Apple Intelligence and OCR analysis.
-4. **Presentation**: editor views, Professional Insights, and self-contained review exports.
+The shared architecture is deliberate:
 
-## Data model
+| Accomplishment concept | Incident Tracker equivalent |
+|---|---|
+| Situation / context | Observed facts + context / interpretation |
+| What I did | Response / what I did |
+| Outcome | Resolution / outcome |
+| Organizational impact | Incident impact |
+| Evidence | Evidence with SHA-256 integrity metadata |
+| Human Value AI | Incident AI + human-judgment analysis |
+| Review packet | Incident packet / review packet |
+| Categories / tags | Categories / tags |
+| Pinned | Pinned |
+| Calendar/history | Incident timeline |
 
-`Accomplishment` is the primary SwiftData model. `EvidenceAttachment` is a child model with cascade deletion. `RequestItem` stores prospective work requests separately from accomplishment records.
+## Factual-integrity boundary
 
-Important inferred/enrichment fields include Human Value Analysis, claim strength, work level, scope classification, career signal, evidence analysis, and generated timestamps.
+The application deliberately keeps these concepts separate:
 
-## Persistence
+1. **Observed facts**: directly observed, reported, logged, or otherwise known information.
+2. **Context / interpretation**: hypotheses, explanations, statements from others, or contextual framing.
+3. **Impact**: what actually changed or was disrupted.
+4. **Response**: actions taken by the user or others in response.
+5. **Resolution**: the resulting state.
+6. **Follow-up**: the unresolved dependency or next action.
+7. **Evidence**: source files kept independently from the prose narrative.
+8. **AI analysis**: explicitly non-evidentiary derivative interpretation.
 
-SwiftData persists the accomplishment database locally with CloudKit disabled.
+This prevents AI output, frustration, or hindsight from being silently blended into the original event record.
 
-Supporting files are copied beneath the historical compatibility namespace:
+## Storage boundary
 
-`~/Library/Application Support/WorkEvidence/EvidenceFiles/<entry UUID>/`
+`IncidentStore` is the single persistence boundary. Views never decide where evidence lives and do not write database files directly.
 
-Evidence Inbox data also uses the historical `WorkEvidence` Application Support namespace. These names are intentionally retained so users upgrading older builds keep access to existing records and evidence.
+Incident records are stored in a versioned `IncidentDatabase` envelope. The loader can also read the earliest unwrapped-array prototype format so the schema can evolve without casually setting fire to the user's history.
 
-## Apple Intelligence
+## Evidence boundary
 
-`AppleIntelligenceEnrichmentService` and `EvidenceIntelligenceService` use Apple's Foundation Models framework and `SystemLanguageModel.default`.
+Import flow:
 
-The AI paths follow several constraints:
+1. User selects one or more source files with `NSOpenPanel`.
+2. The source bytes are read.
+3. SHA-256 is calculated from those bytes.
+4. A copied file is written into the incident's evidence directory.
+5. The record stores the original name, copied filename, byte count, import time, hash, and note.
+6. Verification recalculates the hash from the current copied file.
 
-- model availability is checked before generation;
-- mutable SwiftData models are snapshotted into immutable values before async analysis;
-- prompts are bounded and focused;
-- fresh sessions prevent unrelated records from accumulating in one transcript;
-- generated claims must remain tied to supplied evidence;
-- longitudinal analysis uses sequential batches and synthesis to stay within a bounded working set.
+## AI boundary
 
-## Evidence extraction
+`LocalAIService` uses `SystemLanguageModel.default` through Apple's Foundation Models framework when available.
 
-`EvidenceIntelligenceService` performs local extraction before model analysis:
+The service has two intentionally narrow operations:
 
-- Vision OCR for supported images;
-- PDFKit text extraction for PDFs;
-- attachment count, page, character, and prompt-size limits;
-- downsampled image decoding to reduce unified-memory pressure.
+- `analyze(_:)`: derivative analysis only.
+- `neutralizeFacts(_:)`: proposed factual rewrite only.
 
-## Apple Mail
+No AI function writes directly to persistent storage. The user must explicitly save the incident, and the neutral rewrite requires a separate Apply action before it replaces the facts field.
 
-`AppleMailIntegrationService` uses macOS Apple Events automation to enumerate Mail accounts/mailboxes and read only explicitly selected mailboxes.
+## Export boundary
 
-Two independent lanes are supported:
-
-- **Evidence intake** for retrospective accomplishment evidence.
-- **Request Intelligence** for prospective incoming requests.
-
-Processed Mail message IDs are retained locally to prevent duplicate ingestion. Mail passwords and provider OAuth credentials are not stored by Accomplishment Tracker.
-
-## Request Intelligence
-
-`RequestIntelligenceService` analyzes a bounded request snapshot and retrieves a small set of relevant prior accomplishments through local lexical/context scoring. Only the strongest matches are promoted into active model context.
-
-The generated response remains an editable draft. The application does not automatically send mail or promise work on the user's behalf.
-
-## Ingestion
-
-`IngestionService` supports:
-
-- an application-owned Evidence Inbox;
-- structured JSON intake;
-- `accomplishmenttracker://capture` URL capture;
-- bounded activation scans.
-
-Capture and inference are intentionally separated so incoming material can be stored cheaply before optional AI processing.
-
-## Reports
-
-`ExportService` creates escaped, printable, self-contained HTML. Supported images are embedded inline, PDFs receive embedded previews, and other evidence files are retained as embedded open/save links when possible.
-
-Annual reports, brag documents, and Professional Value Models are generated locally.
-
-## No remote AI dependency
-
-The application intentionally contains no remote language-model client, analytics SDK, telemetry SDK, or CloudKit-backed data synchronization. Apple Intelligence runs through the operating system's on-device Foundation Models framework.
-
-## macOS permissions
-
-The sandbox enables:
-
-- user-selected file read/write for import/export;
-- Apple Events automation for Mail integration.
-
-`NSAppleEventsUsageDescription` explains the Mail access request to the user.
-
-## Resource strategy
-
-The M3/16 GB profile treats unified memory as a shared budget across macOS, SwiftUI, Vision, PDFKit, SwiftData, GPU work, and Foundation Models. Heavy operations are sequential and bounded to prevent avoidable memory-pressure spikes.
+`ExportService` generates static self-contained HTML. Images are embedded as data URIs. Other evidence types are embedded as downloadable/openable data links. The original file name, import timestamp, SHA-256, and current verification result accompany every attachment.

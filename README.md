@@ -1,124 +1,203 @@
-# Accomplishment Tracker
+# Entropy Shield WorkRecord v1.4.1
 
-**Current source release: v1.8.2 Standalone**
+**IT Career Insurance you didn’t know you needed in the age of AI.**
 
-Getting recognized for hard work is only getting harder now that AI can produce an answer in seconds. Accomplishment Tracker empowers IT professionals around the world to log the accomplishments worthy of a raise or a promotion — turning day-to-day hard work into a dated, evidence-backed record instead of something you have to reconstruct from memory the night before a review.
+Entropy Shield WorkRecord is a local-first macOS application for building an evidence-backed record of your professional value **and** the difficult moments that can put that value into question. It combines two complementary records in one app:
 
-Accomplishment Tracker is a local-first macOS application for building a dated, evidence-backed record of professional accomplishments. It is designed for situations where annual performance reviews, promotion cases, or role-scope discussions otherwise depend too heavily on memory and subjective interpretation.
+- **Accomplishments** — what you delivered, improved, automated, protected, recovered, led, or made possible, with evidence you can use in performance reviews and promotion discussions.
+- **Incidents** — factual documentation of workplace events, disputes, failures, escalations, complaints, or other situations where someone may be unhappy with you and an accurate record matters.
 
-The application combines structured accomplishment records, supporting evidence, native Apple Mail intake, Swift Charts insights, and on-device Apple Intelligence analysis. 
+The goal is simple: help you keep the receipts for your career. In an era where AI can answer many of the hard technical questions instantly and does not ask for a Senior Systems Administrator salary, technical knowledge by itself can increasingly become a “so what?” moment. WorkRecord helps preserve the part AI cannot retroactively reconstruct for you: the evidence of what **you** did, the context and judgment you brought, the impact you created, and the record of what actually happened when your work or decisions are challenged.
 
-**New here?** See [`HOW-TO-USE.md`](HOW-TO-USE.md) for a walkthrough — quick capture, the Evidence Framework, the AI features, and exports.
+WorkRecord uses Apple Intelligence locally on supported Macs to generate conservative, evidence-aware professional and incident insights. Analysis stays on-device through Apple’s Foundation Models framework; the app is designed to avoid remote AI APIs, cloud analytics, and silent AI edits to the underlying record.
 
-## Highlights
+Use it to protect two sides of the same career story: **keep your job when the story gets disputed, and build the evidence for the promotion when your work deserves recognition.**
 
-- Dated accomplishment records with context, action, outcome, impact, metrics, stakeholders, tags, and evidence notes.
-- Supporting screenshots, PDFs, documents, and other files copied into local application storage.
-- Self-contained annual HTML review packets with visual evidence rendered inline where supported.
-- Local Apple Intelligence **Human Value Analysis** explaining where human judgment, accountability, context, communication, or physical action mattered.
-- **Professional Intelligence** including claim strength, work level, scope drift, career signals, organizational reach, counterfactual value, missing evidence, and an adversarial "Challenge My Case" analysis.
-- **Professional Insights** dashboard using native Swift Charts for category mix, scope drift, work level, evidence coverage, claim strength, monthly momentum, and related trends.
-- **Brag Document** and **Professional Value Model** generators for evidence-grounded longitudinal summaries.
-- Apple Mail evidence ingestion from one explicitly selected mailbox.
-- Experimental **Request Intelligence** using a second selected Apple Mail mailbox to digest incoming work requests, recall relevant prior accomplishments, and draft a response locally for review.
-- Evidence Inbox, JSON intake, and the `accomplishmenttracker://capture` URL scheme for lightweight local ingestion.
-- Bounded OCR and AI workloads tuned for an M3 MacBook with 16 GB unified memory.
+## Core principles
 
-## Privacy and data boundaries
+- **Facts and interpretation stay separate.** The editor has distinct fields for directly observed/reported facts and contextual interpretation.
+- **Evidence remains inspectable.** Attached files are copied into the local incident store, assigned a recorded import time, and hashed with SHA-256.
+- **AI never silently changes the record.** Apple Intelligence can analyze an incident or draft neutral factual wording, but applying the rewrite requires an explicit user action.
+- **Reports preserve context.** HTML exports show incident details and evidence together instead of producing a detached summary that loses the receipts.
+- **History should survive ordinary mistakes.** The JSON database is written atomically and the tracker automatically keeps the 25 most recent pre-save database snapshots.
 
-Accomplishment Tracker is local-first:
+## Features
 
-- SwiftData persistence is local and CloudKit is disabled.
-- Apple Intelligence uses Apple's on-device Foundation Models framework.
-- The app contains no remote AI API or analytics/telemetry client.
-- Apple Mail integration uses macOS Automation permission and reads only the mailbox selected in Settings.
-- Imported evidence is copied into local Application Support storage.
-- Generated reports are created locally.
+### Incident records
 
-This is **not** a secrets vault. Do not store passwords, private keys, authentication tokens, regulated personal data, or information your employer prohibits from being copied locally.
+Each record supports:
 
-## Apple Mail integration
+- Title
+- Occurred date/time
+- Recorded/discovered date/time
+- Severity: Low, Moderate, High, Critical
+- Status: Draft, Open, Monitoring, Resolved, Closed
+- Category and tags
+- Pinning
+- Observed facts / what happened
+- Context / interpretation
+- Impact
+- Response / what I did
+- Resolution / outcome
+- Follow-up / next step
+- Location / system
+- People involved
+- Witnesses / corroboration
+- Ticket, email, case, or change references
+- Working notes
 
-Accomplishment Tracker supports two optional Mail lanes:
+### Evidence
 
-1. **Evidence mailbox**: messages placed in the selected mailbox can become reviewable accomplishment drafts and supporting evidence.
-2. **Request Intelligence mailbox (experimental)**: messages in a separate selected mailbox can be summarized and used to create an editable local response draft, with relevant prior accomplishments surfaced through bounded contextual recall.
+Attach screenshots, PDFs, exported emails, logs, ticket files, photos, and other source material.
 
-macOS asks for Automation permission the first time Mail access is used. The app does not request mailbox passwords, Microsoft Graph credentials, or OAuth tokens.
+For each attachment the app stores:
 
-## Evidence-first AI design
+- Original file name
+- Local copied file
+- Import timestamp
+- File size
+- SHA-256 hash
+- Optional provenance/note
+- Current hash verification state
 
-Generated analysis is intentionally conservative. Prompts instruct the on-device model to distinguish evidence from inference, avoid invented facts or metrics, and acknowledge when AI or automation could reasonably have performed much of the work.
+The **Open** and **Reveal** buttons let you inspect the actual copied evidence file.
 
-The application is intended to help answer:
+### Incident AI
 
-- What did I actually do?
-- What changed because of it?
-- What evidence supports that claim?
-- Was the work inside or outside my expected role?
-- What level of judgment or ownership did it demonstrate?
-- What patterns emerge across the year?
+When the Mac supports Apple Intelligence and the local Foundation Models framework is available, Incident AI can:
 
-## M3 / 16 GB resource strategy
+- Summarize the incident without inventing facts
+- Identify the supported chronology / causal sequence
+- Analyze operational impact
+- Highlight the response taken and where human judgment mattered
+- Surface missing documentation or ambiguity
+- Suggest follow-up questions/actions
+- Identify pattern signals worth comparing across incidents
+- Draft a more neutral version of the observed-facts narrative
 
-Heavy processing uses bounded working sets:
+The neutral draft is never applied automatically.
 
-- Images are downsampled before Vision OCR.
-- OCR and Foundation Models work runs sequentially rather than creating large parallel memory spikes.
-- PDF extraction is page/character bounded.
-- Evidence analysis caps attachments per pass.
-- Longitudinal reports use sequential map/reduce-style summarization rather than one enormous model context.
-- Inbox scans are batch limited.
+### Reports and patterns
 
-The objective is predictable responsiveness on a 16 GB unified-memory Mac rather than maximum concurrency for its own sake.
+The report view shows:
 
-## Build requirements
+- Total incidents
+- Open / monitoring incidents
+- Critical / high-severity incidents
+- Incidents with evidence
+- AI-enriched incidents
+- Category distribution
+- Severity distribution
+- Repeated exact location/system labels
+- Open incidents that contain follow-up actions
 
-- Xcode with a macOS 26+ SDK
-- Swift 6
-- macOS 26 or later; the UI is intended for macOS 27
-- Apple Intelligence-capable Mac for Foundation Models features
-- Apple Intelligence enabled and its on-device model available
+### HTML exports
 
-### Build
+Two export modes are available:
 
-1. Clone or download the repository.
-2. Open `WorkEvidence.xcodeproj` in Xcode.
-3. Select the `WorkEvidence` target/scheme.
-4. Choose your Apple development team under Signing & Capabilities if required.
-5. Build and run.
+- **Export Incident** from an individual incident
+- **Export Review Packet** for the current filtered incident set
 
-The Xcode project and internal target retain the historical `WorkEvidence` name for compatibility. The product displayed to users is **Accomplishment Tracker**.
+Exports use the Entropy Shield navy/gold card layout and embed image evidence directly in the HTML. Other evidence types are embedded as self-contained data links. Each evidence card includes the recorded SHA-256 hash and whether that hash still verifies at export time.
 
-## Repository layout
+AI output is visually separated and labeled as non-evidentiary.
+
+## Local storage
+
+The app stores its data under:
+
+`~/Library/Application Support/EntropyShield/IncidentTracker/`
+
+The structure is:
 
 ```text
-WorkEvidence/
-  App/        Application entry point
-  Models/     SwiftData and request models
-  Services/   AI, OCR, export, ingestion, Mail, and attachment services
-  Views/      Main UI, editor, settings, insights, and Request Intelligence
-  Assets.xcassets/
-WorkEvidence.xcodeproj/
-ARCHITECTURE.md
-CHANGELOG.md
-HOW-TO-USE.md
+IncidentTracker/
+├── incidents.json
+├── Backups/
+│   └── incidents-YYYYMMDD-HHMMSS-SSS.json
+└── Evidence/
+    └── <incident UUID>/
+        └── <copied evidence files>
 ```
 
-## Local storage compatibility
+No cloud-sync or network layer is implemented.
 
-Some internal storage paths continue to use the historical `WorkEvidence` namespace. This is intentional so upgrades do not strand previously documented accomplishments or evidence files.
+## Build in Xcode
 
-## Disclaimer
+Recommended environment:
 
-**This software is provided "AS IS," without warranty of any kind, express or implied**, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. Use it at your own risk.
+- macOS 15 or later for the core application
+- macOS 26 or later for Incident AI
+- Xcode 27 recommended for the current Foundation Models SDK
 
-The developer makes **no guarantee that this app is free of bugs, data loss, or other defects**, and is **not liable for any damages, data loss, misuse, or other consequences** — direct, indirect, incidental, or otherwise — arising from the use of, or inability to use, this software.
+### Easiest development build
 
-**You are solely responsible for what you choose to record in this app**, including any sensitive, personal, proprietary, or confidential information. Accomplishment Tracker does not review, filter, or restrict what you type, attach, or import — that judgment call is yours alone, every time.
+1. Open `Package.swift` in Xcode.
+2. Select the `IncidentTracker` executable scheme.
+3. Select **My Mac** as the run destination.
+4. Build and Run.
 
-Before recording work-related information, **follow your employer's data-handling policies and any applicable laws or regulations** in your jurisdiction. When in doubt, don't record it here — the Settings screen's Data Guidance section and the "Privacy and data boundaries" notes above are reminders, not a substitute for your own judgment about what's appropriate to keep on your machine.
+The Foundation Models code is compile-gated with `canImport(FoundationModels)` and runtime-gated for macOS 26+.
 
-## License
+## Build a standalone .app locally
 
-This project is licensed under the MIT License — see [`LICENSE`](LICENSE) for the full text.
+A helper script is included:
+
+`Build-App.command`
+
+It performs a release SwiftPM build, creates `build/Incident Tracker.app`, writes a minimal Info.plist, ad-hoc signs the app, and opens the result.
+
+Run from Terminal:
+
+```bash
+cd /path/to/EntropyShield-IncidentTracker-v1.0.1
+./Build-App.command
+```
+
+If macOS strips the executable bit after extracting the ZIP:
+
+```bash
+chmod +x Build-App.command
+./Build-App.command
+```
+
+## Validation performed in the generated package
+
+- Every Swift source file passes `swiftc -parse` under Swift 6.2.1.
+- `Package.swift` is accepted by SwiftPM and the target/source layout is valid.
+- The pure Foundation incident model passes Linux Swift type-checking.
+
+A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the generation environment because it does not contain the macOS SDK or Xcode. Build the package once in Xcode 27 on the Mac before treating the release as production-ready.
+
+## Product identity
+
+**Entropy Shield WorkRecord**  
+*IT Career Insurance for the age of AI.*
+
+**Document the wins. Preserve the facts. Keep the evidence.**
+
+WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v1.2.0 - Review adversary restored
+The Accomplishments mode now restores on-device Human Value and Professional Intelligence generation and adds a dedicated Review Prep screen. `Challenge My Raise Case` intentionally argues the strongest fair case against a raise/promotion using the year's evidence, then identifies factual responses, questions, and evidence to bring to the meeting. See `PRAISEU-AUDIT-v1.2.0.md` for the full merge audit.
+
+## v1.3.0 — Work Intelligence milestone
+
+v1.3.0 promotes the merged Incident + Accomplishment application into a shared work-intelligence system. It adds the real Entropy Shield app icon, About page, Professional Insights, Quick Capture, Evidence Inbox/JSON/URL ingestion, OCR/PDF evidence corroboration, Brag Document, Professional Value Model, Apple Mail evidence intake, experimental Request Intelligence, and cross-mode Work Intelligence.
+
+See `WORK-INTELLIGENCE-ASSESSMENT-v1.3.0.md` for the architectural assessment and next-stage roadmap.
+
+
+## v1.3.1 — Build compatibility fix
+
+Fixes the exhaustive-switch compile failures introduced when Review Prep, Professional Insights, and Automation & Intake were added, and hardens Vision OCR for Swift 6 concurrency checking. No data migration is required.
+
+## v1.4.0 — User-controlled repository and settings
+
+- Added a native Settings window with an explicit Work Record database/repository location.
+- Added Link Existing Database for repository folders, `incidents.json`, or `accomplishments.json`.
+- Added transactional Move Current Database with post-copy validation before switching.
+- Added repository validation, record counts, size reporting, Reveal in Finder, and reset-to-default controls.
+- Incidents, accomplishments, evidence, backups, and Evidence Inbox now resolve from one shared repository root.
+- Added Role Baseline / expected adjacent-work settings to the unified Settings window.
+- Added a functional menu-bar Quick Capture visibility preference and Evidence Inbox auto-scan preference.
+- Upgraded accomplishment HTML review packets to render supported image evidence and bounded PDF previews inline.
