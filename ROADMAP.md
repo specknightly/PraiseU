@@ -57,6 +57,8 @@ Planned capabilities:
 
 ## v1.8.0 — Operational Burden Intelligence
 
+**Status:** Implemented in v1.8.0.
+
 **Goal:** Measure where time and cognitive load are actually going.
 
 - Capture effort, interruption cost, after-hours work, escalation load, coordination load, and repeat-work burden.

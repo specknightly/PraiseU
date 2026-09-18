@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v1.7.0
+# Entropy Shield WorkRecord v1.8.0
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
@@ -177,6 +177,32 @@ A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the gen
 **Document the wins. Preserve the facts. Keep the evidence.**
 
 WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v1.8.0 — Operational Burden Intelligence
+
+WorkRecord can now measure where operational time and attention are actually going.
+
+- New local **Operational Burden** database with rolling backups.
+- Capture active work time, recovery time, after-hours work, interruptions, and context switches.
+- Separate **Measured** time from **Estimated** time everywhere.
+- Record self-reported cognitive and coordination load on bounded 1–5 / 0–5 scales.
+- Link burden to incidents, accomplishments, evidence, people, systems, and projects.
+- Every incident and accomplishment now has a **Burden** tab.
+- Global dashboard shows burden by work type and graph-linked hotspots.
+- Hotspot totals explicitly warn that one record may link to multiple nodes and therefore categories can overlap.
+- On-device Apple Intelligence can summarize burden patterns without judging health, competence, work ethic, or personal worth.
+- After-hours minutes are treated as a subset of active time and are never double-counted.
+
+### Source-only privacy boundary
+
+The GitHub repository remains source-only. Live incident, accomplishment, evidence, Work Graph, prevention, and operational-burden data stays in the user's separate local WorkRecord repository.
+
+- Runtime database/evidence paths are excluded by `.gitignore`.
+- WorkRecord refuses to use a directory inside a Git working tree as its live database location.
+- GitHub Actions runs a source-only privacy guard on pushes and pull requests.
+- Before v1.8.0, all 30 commits reachable from `main` were audited for runtime database paths, evidence directories, and common attached-document formats; none were found.
+
+See [DATA-PRIVACY.md](DATA-PRIVACY.md) and [RELEASE-v1.8.0.md](RELEASE-v1.8.0.md).
+
 ## v1.7.0 — Prevention & Intervention Ledger
 
 WorkRecord now captures the work whose success often looks like “nothing happened.”

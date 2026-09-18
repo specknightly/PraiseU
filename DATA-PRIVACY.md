@@ -28,4 +28,11 @@ Do not add sample career records derived from a real user. Test fixtures, if int
 
 Before v1.8.0 development, the reachable `main` history was audited for runtime database paths, evidence directories, and common evidence/document file formats. No live WorkRecord database or evidence attachment was found.
 
+Additional safeguards added for v1.8.0:
+
+- Runtime WorkRecord paths and common evidence attachment formats are ignored by Git.
+- The application refuses to create or link its live database inside any Git working tree.
+- `Scripts/verify-source-only.sh` checks tracked paths.
+- GitHub Actions runs that privacy guard on pushes and pull requests.
+
 If runtime data is ever discovered in Git history, stop normal development and treat removal as a privacy incident rather than simply deleting the file in a later commit.
