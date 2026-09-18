@@ -18,7 +18,10 @@ enum ResponsibilityDriftExportService {
         lines.append("## Role baseline")
         lines.append("")
         lines.append("- Role title: \(roleTitle)")
-        lines.append("- Baseline effective date: \(report.baseline.effectiveDate.formatted(date: .long, time: .omitted))")
+        lines.append("- Baseline source: \(report.usesFallbackBaseline ? "Current Settings (not yet saved as a dated snapshot)" : "Saved dated baseline snapshot")")
+        if !report.usesFallbackBaseline {
+            lines.append("- Baseline effective date: \(report.baseline.effectiveDate.formatted(date: .long, time: .omitted))")
+        }
         lines.append("- Expected adjacent / out-of-role allowance: \(Int(expected.rounded()))%")
         lines.append("- Role definition: \(roleDefinition)")
         lines.append("")
@@ -83,6 +86,9 @@ enum ResponsibilityDriftExportService {
         lines.append("")
         lines.append("## Limitations")
         lines.append("")
+        if report.usesFallbackBaseline {
+            lines.append("- The baseline is currently taken from Settings rather than a dated snapshot; save a baseline before making historical change claims.")
+        }
         lines.append("- Scope labels are user classifications and should be supported by the official role description, assignment history, or other durable evidence.")
         lines.append("- Record counts are not the same as percentage of working time.")
         lines.append("- Estimated burden remains estimated.")

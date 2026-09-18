@@ -50,6 +50,7 @@ struct ResponsibilityOwnershipSignal: Identifiable, Hashable {
 
 struct ResponsibilityDriftReport {
     let baseline: RoleBaselineSnapshot
+    let usesFallbackBaseline: Bool
     let evidence: [ResponsibilityDriftEvidenceItem]
     let periods: [ResponsibilityDriftPeriod]
     let ownershipSignals: [ResponsibilityOwnershipSignal]
@@ -94,12 +95,13 @@ enum ResponsibilityDriftEngine {
         fallbackExpectedAdjacentPercent: Double
     ) -> ResponsibilityDriftReport {
         let fallback = RoleBaselineSnapshot(
-            effectiveDate: .distantPast,
+            effectiveDate: Date(),
             roleTitle: fallbackRoleTitle,
             roleDefinition: fallbackRoleDefinition,
             expectedAdjacentPercent: min(100, max(0, fallbackExpectedAdjacentPercent))
         )
-        let baseline = drift.latestBaseline ?? fallback
+        let storedBaseline = drift.latestBaseline
+        let baseline = storedBaseline ?? fallback
 
         var evidence: [ResponsibilityDriftEvidenceItem] = []
         var linkedNodesByEvidenceID: [String: Set<WorkGraphNodeRef>] = [:]
@@ -221,6 +223,7 @@ enum ResponsibilityDriftEngine {
 
         return ResponsibilityDriftReport(
             baseline: baseline,
+            usesFallbackBaseline: storedBaseline == nil,
             evidence: evidence,
             periods: periods,
             ownershipSignals: ownershipSignals

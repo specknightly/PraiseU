@@ -115,7 +115,9 @@ struct ResponsibilityDriftView: View {
             summaryCard(
                 title: "CURRENT BASELINE",
                 value: report.baseline.displayTitle,
-                detail: "Effective \(report.baseline.effectiveDate.formatted(date: .abbreviated, time: .omitted))"
+                detail: report.usesFallbackBaseline
+                    ? "Current Settings · not yet a dated snapshot"
+                    : "Effective \(report.baseline.effectiveDate.formatted(date: .abbreviated, time: .omitted))"
             )
 
             summaryCard(

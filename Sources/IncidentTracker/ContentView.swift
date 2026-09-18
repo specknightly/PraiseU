@@ -99,7 +99,6 @@ struct ContentView: View {
                     workGraphStore.lastError = nil
                     preventionLedgerStore.lastError = nil
                     operationalBurdenStore.lastError = nil
-                responsibilityDriftStore.lastError = nil
                     responsibilityDriftStore.lastError = nil
                 }
             }
@@ -110,6 +109,7 @@ struct ContentView: View {
                 workGraphStore.lastError = nil
                 preventionLedgerStore.lastError = nil
                 operationalBurdenStore.lastError = nil
+                responsibilityDriftStore.lastError = nil
             }
         }
         message: { Text(incidentStore.lastError ?? accomplishmentStore.lastError ?? workGraphStore.lastError ?? preventionLedgerStore.lastError ?? operationalBurdenStore.lastError ?? responsibilityDriftStore.lastError ?? "") }
