@@ -31,6 +31,9 @@ enum WorkRecordStorage {
     static var preventionLedgerRootURL: URL { rootURL.appendingPathComponent("PreventionLedger", isDirectory: true) }
     static var preventionLedgerURL: URL { preventionLedgerRootURL.appendingPathComponent("prevention-ledger.json") }
     static var preventionLedgerBackupsURL: URL { preventionLedgerRootURL.appendingPathComponent("Backups", isDirectory: true) }
+    static var operationalBurdenRootURL: URL { rootURL.appendingPathComponent("OperationalBurden", isDirectory: true) }
+    static var operationalBurdenURL: URL { operationalBurdenRootURL.appendingPathComponent("operational-burden.json") }
+    static var operationalBurdenBackupsURL: URL { operationalBurdenRootURL.appendingPathComponent("Backups", isDirectory: true) }
 
     static func prepareRoot(_ root: URL = rootURL) throws {
         let fm = FileManager.default
@@ -49,6 +52,9 @@ enum WorkRecordStorage {
         let prevention = root.appendingPathComponent("PreventionLedger", isDirectory: true)
         try fm.createDirectory(at: prevention, withIntermediateDirectories: true)
         try fm.createDirectory(at: prevention.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
+        let operationalBurden = root.appendingPathComponent("OperationalBurden", isDirectory: true)
+        try fm.createDirectory(at: operationalBurden, withIntermediateDirectories: true)
+        try fm.createDirectory(at: operationalBurden.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
     }
 
     struct ValidationResult {
@@ -106,6 +112,17 @@ enum WorkRecordStorage {
             } catch {
                 valid = false
                 notes.append("prevention-ledger.json could not be decoded")
+            }
+        }
+
+        let operationalBurden = root.appendingPathComponent("OperationalBurden/operational-burden.json")
+        if fm.fileExists(atPath: operationalBurden.path) {
+            do {
+                let data = try Data(contentsOf: operationalBurden)
+                _ = try JSONDecoder.incidentDecoder.decode(OperationalBurdenDatabase.self, from: data)
+            } catch {
+                valid = false
+                notes.append("operational-burden.json could not be decoded")
             }
         }
 

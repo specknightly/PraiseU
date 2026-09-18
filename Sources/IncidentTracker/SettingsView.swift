@@ -6,6 +6,7 @@ struct SettingsView: View {
     @EnvironmentObject private var accomplishmentStore: AccomplishmentStore
     @EnvironmentObject private var workGraphStore: WorkGraphStore
     @EnvironmentObject private var preventionLedgerStore: PreventionLedgerStore
+    @EnvironmentObject private var operationalBurdenStore: OperationalBurdenStore
 
     @AppStorage("coreRoleDefinition") private var coreRoleDefinition = "Password resets, routine account access, basic desktop support, and other duties explicitly assigned to my primary IT support role."
     @AppStorage("expectedOtherPercent") private var expectedOtherPercent = 10.0
@@ -24,7 +25,7 @@ struct SettingsView: View {
                 LabeledContent("Current repository") {
                     Text(WorkRecordStorage.rootURL.path).font(.caption.monospaced()).textSelection(.enabled)
                 }
-                Text("Incidents, accomplishments, evidence files, Work Graph relationships, Prevention Ledger records, backups, and the Evidence Inbox are kept under this single repository root.")
+                Text("Incidents, accomplishments, evidence files, Work Graph relationships, Prevention Ledger records, Operational Burden records, backups, and the Evidence Inbox are kept under this single local repository root.")
                     .font(.callout).foregroundStyle(.secondary)
                 HStack {
                     Button("Reveal in Finder") { WorkRecordStorage.revealCurrentRoot() }
@@ -39,6 +40,7 @@ struct SettingsView: View {
                     Label("\(validation.accomplishmentCount) accomplishments", systemImage: "trophy")
                     Label("\(workGraphStore.links.count) graph links", systemImage: "link")
                     Label("\(preventionLedgerStore.totalCount) prevention records", systemImage: "shield.checkered")
+                    Label("\(operationalBurdenStore.totalCount) burden records", systemImage: "gauge.with.dots.needle.50percent")
                     Label(ByteCountFormatter.string(fromByteCount: validation.totalBytes, countStyle: .file), systemImage: "externaldrive")
                 }.font(.caption).foregroundStyle(.secondary)
                 Text(validation.message).font(.caption).foregroundStyle(validation.isValid ? ESTheme.gold : .red)
@@ -113,5 +115,6 @@ struct SettingsView: View {
         accomplishmentStore.reloadFromStorage()
         workGraphStore.reloadFromStorage()
         preventionLedgerStore.reloadFromStorage()
+        operationalBurdenStore.reloadFromStorage()
     }
 }
