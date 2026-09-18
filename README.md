@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v1.9.0
+# Entropy Shield WorkRecord v1.9.1
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
@@ -98,7 +98,7 @@ Two export modes are available:
 - **Export Incident** from an individual incident
 - **Export Review Packet** for the current filtered incident set
 
-Exports use the Entropy Shield navy/gold card layout and embed image evidence directly in the HTML. Other evidence types are embedded as self-contained data links. Each evidence card includes the recorded SHA-256 hash and whether that hash still verifies at export time.
+Exports use the Entropy Shield dark charcoal / matte-gold visual language and embed image evidence directly in the HTML. Other evidence types are embedded as self-contained data links. Each evidence card includes the recorded SHA-256 hash and whether that hash still verifies at export time.
 
 AI output is visually separated and labeled as non-evidentiary.
 
@@ -177,6 +177,23 @@ A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the gen
 **Document the wins. Preserve the facts. Keep the evidence.**
 
 WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v1.9.1 — Modern Dark / Matte-Gold Theme
+
+WorkRecord now uses a dark-only visual system inspired by modern operational and financial dashboards.
+
+- Forced Dark Aqua appearance across the main window, Settings, and Quick Capture.
+- Replaced the legacy navy/bright-blue palette with neutral charcoal and near-black surfaces.
+- Pale/matte gold is now the sole primary accent family.
+- Selected mode controls use matte gold with dark text for clear contrast.
+- Sidebar selections use subtle gold-tinted surfaces and borders instead of solid blue blocks.
+- Incident and accomplishment list selections use dark cards with pale-gold emphasis.
+- Editor tabs and status icons use the same matte-gold hierarchy.
+- Panels use subtle depth, low-contrast gold borders, and restrained shadows.
+- The visual refresh does not alter any career-data schema or storage behavior.
+- The external visual reference used to guide the design is not included in the source repository.
+
+See [RELEASE-v1.9.1.md](RELEASE-v1.9.1.md).
+
 ## v1.9.0 — Responsibility Drift Observatory
 
 WorkRecord can now compare documented work against a dated role baseline and show how the real job diverges from the written job.
