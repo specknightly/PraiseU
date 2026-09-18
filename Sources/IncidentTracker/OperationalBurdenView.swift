@@ -10,6 +10,9 @@ struct OperationalBurdenView: View {
 
     @State private var selectedID: UUID?
     @State private var searchText = ""
+    @State private var intelligence = ""
+    @State private var isAnalyzing = false
+    @State private var analysisError: String?
 
     private var records: [OperationalBurdenRecord] {
         let base = subject.map { burdenStore.records(linkedTo: $0) } ?? burdenStore.records
@@ -36,6 +39,15 @@ struct OperationalBurdenView: View {
         return burdenStore.record(id: selectedID)
     }
 
+    private var hotspots: [OperationalBurdenHotspot] {
+        OperationalBurdenAnalytics.hotspots(
+            records: burdenStore.records,
+            incidents: incidentStore,
+            accomplishments: accomplishmentStore,
+            graph: graphStore
+        )
+    }
+
     var body: some View {
         HStack(spacing: 0) {
             VStack(spacing: 10) {
@@ -46,6 +58,7 @@ struct OperationalBurdenView: View {
                 if subject == nil {
                     burdenSummary
                     kindBreakdown
+                    hotspotBreakdown
                 }
 
                 List(records, selection: $selectedID) { record in
@@ -78,7 +91,32 @@ struct OperationalBurdenView: View {
             Divider().overlay(ESTheme.border)
 
             ScrollView {
-                if let selectedRecord {
+                if subject == nil, let analysisError {
+                    Label(analysisError, systemImage: "exclamationmark.triangle")
+                        .font(.caption)
+                        .foregroundStyle(ESTheme.gold)
+                        .padding(18)
+                }
+
+                if subject == nil, !intelligence.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text("Operational Burden Intelligence").font(.headline)
+                            Spacer()
+                            Text("On-device · non-evidentiary").font(.caption).foregroundStyle(ESTheme.muted)
+                            Button("Close Analysis") { intelligence = "" }
+                        }
+                        TextEditor(text: $intelligence)
+                            .font(.system(size: 13))
+                            .scrollContentBackground(.hidden)
+                            .padding(8)
+                            .frame(minHeight: 430)
+                            .background(ESTheme.field)
+                            .clipShape(RoundedRectangle(cornerRadius: 9))
+                            .overlay(RoundedRectangle(cornerRadius: 9).stroke(ESTheme.border))
+                    }
+                    .padding(18)
+                } else if let selectedRecord {
                     OperationalBurdenRecordEditor(record: selectedRecord)
                         .id(selectedRecord.id)
                         .padding(18)
@@ -118,9 +156,20 @@ struct OperationalBurdenView: View {
                     .font(.caption).foregroundStyle(ESTheme.muted)
             }
             Spacer()
+            if subject == nil {
+                Button {
+                    analyzeBurden()
+                } label: {
+                    Label(isAnalyzing ? "Analyzing…" : "Analyze Burden", systemImage: "sparkles")
+                }
+                .buttonStyle(.bordered)
+                .disabled(isAnalyzing || burdenStore.records.isEmpty || !AccomplishmentAIService.isAvailable)
+            }
+
             Button {
                 let record = burdenStore.create(sourceRecord: subject)
                 selectedID = record.id
+                intelligence = ""
             } label: {
                 Label("New Burden", systemImage: "plus")
             }
@@ -168,6 +217,66 @@ struct OperationalBurdenView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(ESTheme.panelRaised)
         .clipShape(RoundedRectangle(cornerRadius: 9))
+    }
+
+    private var hotspotBreakdown: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text("GRAPH HOTSPOTS").font(.system(size: 9, weight: .bold)).foregroundStyle(ESTheme.muted)
+
+            if hotspots.isEmpty {
+                Text("Link burden records to people, systems, or projects to see repeated operational attention.")
+                    .font(.caption2)
+                    .foregroundStyle(ESTheme.muted)
+            } else {
+                ForEach(hotspots.prefix(5)) { hotspot in
+                    HStack {
+                        Image(systemName: hotspot.node.kind.symbol).frame(width: 18)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(hotspot.node.title).lineLimit(1)
+                            Text("\(hotspot.recordCount) record\(hotspot.recordCount == 1 ? "" : "s")")
+                                .font(.caption2).foregroundStyle(ESTheme.muted)
+                        }
+                        Spacer()
+                        Text(formatHours(hotspot.totalMinutes))
+                            .monospacedDigit()
+                            .foregroundStyle(ESTheme.muted)
+                    }
+                    .font(.caption)
+                }
+
+                Text("Hotspot totals can overlap because one burden record may link to multiple graph nodes.")
+                    .font(.caption2)
+                    .foregroundStyle(ESTheme.muted)
+            }
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(ESTheme.panelRaised)
+        .clipShape(RoundedRectangle(cornerRadius: 9))
+    }
+
+    private func analyzeBurden() {
+        guard !isAnalyzing else { return }
+        isAnalyzing = true
+        analysisError = nil
+
+        Task {
+            do {
+                let result = try await OperationalBurdenAIService.analyze(
+                    records: burdenStore.records,
+                    hotspots: hotspots
+                )
+                await MainActor.run {
+                    intelligence = result
+                    isAnalyzing = false
+                }
+            } catch {
+                await MainActor.run {
+                    analysisError = error.localizedDescription
+                    isAnalyzing = false
+                }
+            }
+        }
     }
 
     private func formatHours(_ minutes: Int) -> String {
