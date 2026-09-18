@@ -34,6 +34,9 @@ enum WorkRecordStorage {
     static var operationalBurdenRootURL: URL { rootURL.appendingPathComponent("OperationalBurden", isDirectory: true) }
     static var operationalBurdenURL: URL { operationalBurdenRootURL.appendingPathComponent("operational-burden.json") }
     static var operationalBurdenBackupsURL: URL { operationalBurdenRootURL.appendingPathComponent("Backups", isDirectory: true) }
+    static var responsibilityDriftRootURL: URL { rootURL.appendingPathComponent("ResponsibilityDrift", isDirectory: true) }
+    static var responsibilityDriftURL: URL { responsibilityDriftRootURL.appendingPathComponent("responsibility-drift.json") }
+    static var responsibilityDriftBackupsURL: URL { responsibilityDriftRootURL.appendingPathComponent("Backups", isDirectory: true) }
 
     static func prepareRoot(_ root: URL = rootURL) throws {
         let fm = FileManager.default
@@ -64,6 +67,9 @@ enum WorkRecordStorage {
         let operationalBurden = root.appendingPathComponent("OperationalBurden", isDirectory: true)
         try fm.createDirectory(at: operationalBurden, withIntermediateDirectories: true)
         try fm.createDirectory(at: operationalBurden.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
+        let responsibilityDrift = root.appendingPathComponent("ResponsibilityDrift", isDirectory: true)
+        try fm.createDirectory(at: responsibilityDrift, withIntermediateDirectories: true)
+        try fm.createDirectory(at: responsibilityDrift.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
     }
 
     struct ValidationResult {
@@ -132,6 +138,17 @@ enum WorkRecordStorage {
             } catch {
                 valid = false
                 notes.append("operational-burden.json could not be decoded")
+            }
+        }
+
+        let responsibilityDrift = root.appendingPathComponent("ResponsibilityDrift/responsibility-drift.json")
+        if fm.fileExists(atPath: responsibilityDrift.path) {
+            do {
+                let data = try Data(contentsOf: responsibilityDrift)
+                _ = try JSONDecoder.incidentDecoder.decode(ResponsibilityDriftDatabase.self, from: data)
+            } catch {
+                valid = false
+                notes.append("responsibility-drift.json could not be decoded")
             }
         }
 

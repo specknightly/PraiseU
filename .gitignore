@@ -24,6 +24,9 @@ PreventionLedger/Backups/
 OperationalBurden/operational-burden.json
 OperationalBurden/Backups/
 
+ResponsibilityDrift/responsibility-drift.json
+ResponsibilityDrift/Backups/
+
 # Common evidence/document formats should not be added to this source repository.
 *.eml
 *.msg

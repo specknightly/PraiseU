@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -euo pipefail
 
-forbidden_path_regex='(^|/)(incidents\.json|accomplishments\.json|work-graph\.json|prevention-ledger\.json|operational-burden\.json)$|(^|/)(Evidence|Backups|Evidence Inbox)(/|$)'
+forbidden_path_regex='(^|/)(incidents\.json|accomplishments\.json|work-graph\.json|prevention-ledger\.json|operational-burden\.json|responsibility-drift\.json)$|(^|/)(Evidence|Backups|Evidence Inbox)(/|$)'
 forbidden_extension_regex='\.(eml|msg|mbox|pdf|doc|docx|xls|xlsx|csv|rtf|pages|numbers|key)$'
 
 violations="$(git ls-files | grep -Ei "$forbidden_path_regex|$forbidden_extension_regex" || true)"

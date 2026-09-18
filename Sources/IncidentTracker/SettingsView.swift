@@ -7,7 +7,9 @@ struct SettingsView: View {
     @EnvironmentObject private var workGraphStore: WorkGraphStore
     @EnvironmentObject private var preventionLedgerStore: PreventionLedgerStore
     @EnvironmentObject private var operationalBurdenStore: OperationalBurdenStore
+    @EnvironmentObject private var responsibilityDriftStore: ResponsibilityDriftStore
 
+    @AppStorage("roleTitle") private var roleTitle = ""
     @AppStorage("coreRoleDefinition") private var coreRoleDefinition = "Password resets, routine account access, basic desktop support, and other duties explicitly assigned to my primary IT support role."
     @AppStorage("expectedOtherPercent") private var expectedOtherPercent = 10.0
     @AppStorage("autoScanEvidenceInbox") private var autoScanEvidenceInbox = true
@@ -17,6 +19,7 @@ struct SettingsView: View {
     @AppStorage("evidenceMailPath") private var evidenceMailPath = ""
 
     @State private var storageStatus = ""
+    @State private var baselineStatus = ""
     @State private var validation = WorkRecordStorage.validate(root: WorkRecordStorage.rootURL)
 
     var body: some View {
@@ -48,13 +51,31 @@ struct SettingsView: View {
             }
 
             Section("Role Baseline & Scope") {
-                Text("Apple Intelligence compares accomplishments against this baseline when estimating scope drift, work level, and review arguments.").font(.callout).foregroundStyle(.secondary)
+                Text("Responsibility Drift compares dated work evidence against this baseline. Save a snapshot whenever the official role or expected adjacent-work allowance materially changes.").font(.callout).foregroundStyle(.secondary)
+                TextField("Official role title", text: $roleTitle)
                 TextEditor(text: $coreRoleDefinition).frame(minHeight: 110)
                 HStack {
                     Text("Expected adjacent / out-of-role work")
                     Spacer()
                     Slider(value: $expectedOtherPercent, in: 0...50, step: 1).frame(width: 280)
                     Text("\(Int(expectedOtherPercent))%").monospacedDigit().frame(width: 44)
+                }
+                HStack {
+                    Button("Save Current Role Baseline") {
+                        _ = responsibilityDriftStore.createBaseline(
+                            roleTitle: roleTitle,
+                            roleDefinition: coreRoleDefinition,
+                            expectedAdjacentPercent: expectedOtherPercent
+                        )
+                        baselineStatus = "Saved a dated role baseline snapshot."
+                    }
+                    Text("\(responsibilityDriftStore.baselines.count) saved baseline\(responsibilityDriftStore.baselines.count == 1 ? "" : "s")")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    if !baselineStatus.isEmpty {
+                        Text(baselineStatus).font(.caption).foregroundStyle(.secondary)
+                    }
                 }
             }
 
@@ -121,5 +142,6 @@ struct SettingsView: View {
         workGraphStore.reloadFromStorage()
         preventionLedgerStore.reloadFromStorage()
         operationalBurdenStore.reloadFromStorage()
+        responsibilityDriftStore.reloadFromStorage()
     }
 }

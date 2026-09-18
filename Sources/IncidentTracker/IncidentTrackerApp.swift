@@ -7,6 +7,7 @@ struct IncidentTrackerApp: App {
     @StateObject private var workGraphStore = WorkGraphStore()
     @StateObject private var preventionLedgerStore = PreventionLedgerStore()
     @StateObject private var operationalBurdenStore = OperationalBurdenStore()
+    @StateObject private var responsibilityDriftStore = ResponsibilityDriftStore()
     @AppStorage("showMenuBarQuickCapture") private var showMenuBarQuickCapture = true
 
     var body: some Scene {
@@ -17,6 +18,7 @@ struct IncidentTrackerApp: App {
                 .environmentObject(workGraphStore)
                 .environmentObject(preventionLedgerStore)
                 .environmentObject(operationalBurdenStore)
+                .environmentObject(responsibilityDriftStore)
                 .frame(minWidth: 1180, minHeight: 760)
         }
         .commands {
@@ -40,6 +42,7 @@ struct IncidentTrackerApp: App {
                 .environmentObject(workGraphStore)
                 .environmentObject(preventionLedgerStore)
                 .environmentObject(operationalBurdenStore)
+                .environmentObject(responsibilityDriftStore)
         }
     }
 }
