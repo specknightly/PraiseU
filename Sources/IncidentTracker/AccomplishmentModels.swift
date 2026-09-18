@@ -140,6 +140,7 @@ enum AccomplishmentDetailTab: String, CaseIterable, Identifiable {
     case evidence = "Evidence"
     case intelligence = "Value Intelligence"
     case recall = "Related History"
+    case prevention = "Prevention"
     case relationships = "Relationships"
     case notes = "Notes"
     var id: String { rawValue }
@@ -149,6 +150,7 @@ enum AccomplishmentDetailTab: String, CaseIterable, Identifiable {
         case .evidence: return "paperclip"
         case .intelligence: return "sparkles"
         case .recall: return "clock.arrow.circlepath"
+        case .prevention: return "shield.checkered"
         case .relationships: return "link"
         case .notes: return "note.text"
         }

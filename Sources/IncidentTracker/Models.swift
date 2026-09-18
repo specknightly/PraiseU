@@ -134,6 +134,7 @@ enum DetailTab: String, CaseIterable, Identifiable {
     case evidence = "Evidence"
     case ai = "Incident AI"
     case recall = "Related History"
+    case prevention = "Prevention"
     case relationships = "Relationships"
     case notes = "Notes"
 
@@ -144,6 +145,7 @@ enum DetailTab: String, CaseIterable, Identifiable {
         case .evidence: return "paperclip"
         case .ai: return "sparkles"
         case .recall: return "clock.arrow.circlepath"
+        case .prevention: return "shield.checkered"
         case .relationships: return "link"
         case .notes: return "note.text"
         }

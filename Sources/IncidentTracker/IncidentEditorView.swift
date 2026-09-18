@@ -33,6 +33,9 @@ struct IncidentEditorView: View {
                             IncidentAIView(draft: $draft)
                         case .recall:
                             ContextualRecallView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
+                        case .prevention:
+                            PreventionLedgerView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
+                                .frame(minHeight: 560)
                         case .relationships:
                             RelationshipEditorView(subject: WorkGraphNodeRef(kind: .incident, nodeID: draft.id))
                         case .notes:

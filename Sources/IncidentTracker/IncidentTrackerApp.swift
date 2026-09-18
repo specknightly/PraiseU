@@ -30,13 +30,13 @@ struct IncidentTrackerApp: App {
             QuickCaptureView()
                 .environmentObject(accomplishmentStore)
                 .environmentObject(workGraphStore)
-                .environmentObject(preventionLedgerStore)
         }
         Settings {
             SettingsView()
                 .environmentObject(incidentStore)
                 .environmentObject(accomplishmentStore)
                 .environmentObject(workGraphStore)
+                .environmentObject(preventionLedgerStore)
         }
     }
 }
