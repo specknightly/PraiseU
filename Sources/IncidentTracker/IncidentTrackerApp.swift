@@ -4,6 +4,7 @@ import SwiftUI
 struct IncidentTrackerApp: App {
     @StateObject private var incidentStore = IncidentStore()
     @StateObject private var accomplishmentStore = AccomplishmentStore()
+    @StateObject private var workGraphStore = WorkGraphStore()
     @AppStorage("showMenuBarQuickCapture") private var showMenuBarQuickCapture = true
 
     var body: some Scene {
@@ -11,6 +12,7 @@ struct IncidentTrackerApp: App {
             ContentView()
                 .environmentObject(incidentStore)
                 .environmentObject(accomplishmentStore)
+                .environmentObject(workGraphStore)
                 .frame(minWidth: 1180, minHeight: 760)
         }
         .commands {
@@ -25,6 +27,7 @@ struct IncidentTrackerApp: App {
         ) {
             QuickCaptureView()
                 .environmentObject(accomplishmentStore)
+                .environmentObject(workGraphStore)
         }
         Settings {
             SettingsView()

@@ -25,6 +25,9 @@ enum WorkRecordStorage {
     static var accomplishmentEvidenceURL: URL { accomplishmentsRootURL.appendingPathComponent("Evidence", isDirectory: true) }
     static var accomplishmentBackupsURL: URL { accomplishmentsRootURL.appendingPathComponent("Backups", isDirectory: true) }
     static var evidenceInboxURL: URL { rootURL.appendingPathComponent("Evidence Inbox", isDirectory: true) }
+    static var workGraphRootURL: URL { rootURL.appendingPathComponent("WorkGraph", isDirectory: true) }
+    static var workGraphURL: URL { workGraphRootURL.appendingPathComponent("work-graph.json") }
+    static var workGraphBackupsURL: URL { workGraphRootURL.appendingPathComponent("Backups", isDirectory: true) }
 
     static func prepareRoot(_ root: URL = rootURL) throws {
         let fm = FileManager.default
@@ -37,6 +40,9 @@ enum WorkRecordStorage {
         try fm.createDirectory(at: accomplishments.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
         try fm.createDirectory(at: root.appendingPathComponent("Evidence Inbox", isDirectory: true), withIntermediateDirectories: true)
         try fm.createDirectory(at: root.appendingPathComponent("Evidence Inbox/Processed", isDirectory: true), withIntermediateDirectories: true)
+        let workGraph = root.appendingPathComponent("WorkGraph", isDirectory: true)
+        try fm.createDirectory(at: workGraph, withIntermediateDirectories: true)
+        try fm.createDirectory(at: workGraph.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
     }
 
     struct ValidationResult {
@@ -74,6 +80,17 @@ enum WorkRecordStorage {
                 else { accomplishmentCount = try decoder.decode([AccomplishmentRecord].self, from: data).count }
             } catch { valid = false; notes.append("accomplishments.json could not be decoded") }
         } else { notes.append("no accomplishment database found") }
+
+        let workGraph = root.appendingPathComponent("WorkGraph/work-graph.json")
+        if fm.fileExists(atPath: workGraph.path) {
+            do {
+                let data = try Data(contentsOf: workGraph)
+                _ = try JSONDecoder.incidentDecoder.decode(WorkGraphDatabase.self, from: data)
+            } catch {
+                valid = false
+                notes.append("work-graph.json could not be decoded")
+            }
+        }
 
         let stats = directoryStats(root)
         if !fm.fileExists(atPath: root.path) { valid = false; notes.append("folder does not exist") }
