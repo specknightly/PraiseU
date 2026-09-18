@@ -214,7 +214,8 @@ struct WorkIntelligenceAssistantView: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(ESTheme.muted)
 
-                    ForEach(Array(turn.sources.enumerated()), id: \.element.id) { index, source in
+                    ForEach(turn.sources.indices, id: \.self) { index in
+                        let source = turn.sources[index]
                         HStack(spacing: 7) {
                             Text("[S\(index + 1)]")
                                 .font(.caption.monospaced().weight(.bold))
@@ -282,8 +283,8 @@ struct WorkIntelligenceAssistantView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 9) {
-                        ForEach(Array(previewSources.enumerated()), id: \.element.id) { index, source in
-                            sourceCard(index: index, source: source)
+                        ForEach(previewSources.indices, id: \.self) { index in
+                            sourceCard(index: index, source: previewSources[index])
                         }
                     }
                 }
@@ -471,6 +472,14 @@ struct WorkIntelligenceAssistantView: View {
         panel.nameFieldStringValue = "Work-Intelligence-Transcript.md"
         panel.title = "Export Work Intelligence Transcript"
         guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        if WorkRecordStorage.isInsideGitWorkingTree(url.deletingLastPathComponent()) {
+            let alert = NSAlert()
+            alert.messageText = "Choose a non-Git folder"
+            alert.informativeText = "For privacy, Work Intelligence transcripts cannot be exported inside a Git working tree."
+            alert.runModal()
+            return
+        }
 
         var output = "# Work Intelligence Assistant Transcript\n\n"
         output += "Generated: \(Date().formatted(date: .long, time: .shortened))\n\n"

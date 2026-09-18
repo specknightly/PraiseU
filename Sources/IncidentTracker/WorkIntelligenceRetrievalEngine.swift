@@ -274,7 +274,8 @@ enum WorkIntelligenceRetrievalEngine {
                 scoreValue += 18
                 reasons.append("Question asks about people, systems, or projects")
             }
-            if subject != nil && graph.links(for: entity.nodeRef).contains(where: { $0.touches(subject!) }) {
+            if let subject,
+               graph.links(for: entity.nodeRef).contains(where: { $0.touches(subject) }) {
                 scoreValue += 75
                 reasons.append("Connected to the current record")
             }
