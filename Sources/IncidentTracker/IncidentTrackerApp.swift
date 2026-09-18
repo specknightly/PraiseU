@@ -1,7 +1,12 @@
+import AppKit
 import SwiftUI
 
 @main
 struct IncidentTrackerApp: App {
+    init() {
+        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+    }
+
     @StateObject private var incidentStore = IncidentStore()
     @StateObject private var accomplishmentStore = AccomplishmentStore()
     @StateObject private var workGraphStore = WorkGraphStore()
@@ -19,6 +24,8 @@ struct IncidentTrackerApp: App {
                 .environmentObject(preventionLedgerStore)
                 .environmentObject(operationalBurdenStore)
                 .environmentObject(responsibilityDriftStore)
+                .preferredColorScheme(.dark)
+                .tint(ESTheme.accent)
                 .frame(minWidth: 1180, minHeight: 760)
         }
         .commands {
@@ -34,6 +41,8 @@ struct IncidentTrackerApp: App {
             QuickCaptureView()
                 .environmentObject(accomplishmentStore)
                 .environmentObject(workGraphStore)
+                .preferredColorScheme(.dark)
+                .tint(ESTheme.accent)
         }
         Settings {
             SettingsView()
@@ -43,6 +52,8 @@ struct IncidentTrackerApp: App {
                 .environmentObject(preventionLedgerStore)
                 .environmentObject(operationalBurdenStore)
                 .environmentObject(responsibilityDriftStore)
+                .preferredColorScheme(.dark)
+                .tint(ESTheme.accent)
         }
     }
 }

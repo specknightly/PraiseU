@@ -43,7 +43,7 @@ struct SidebarView: View {
                         .padding(.top, 5)
                     } label: {
                         Label("Categories", systemImage: "folder")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(ESTheme.textPrimary)
                     }
                     .padding(.horizontal, 13)
                     .padding(.vertical, 7)
@@ -60,7 +60,7 @@ struct SidebarView: View {
                         .padding(.top, 5)
                     } label: {
                         Label("Tags", systemImage: "tag")
-                            .foregroundStyle(.white)
+                            .foregroundStyle(ESTheme.textPrimary)
                     }
                     .padding(.horizontal, 13)
                     .padding(.vertical, 7)
@@ -108,16 +108,20 @@ private struct SidebarButton: View {
                         .font(.system(size: 11, weight: .bold))
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3)
-                        .background(.white.opacity(selected ? 0.18 : 0.10))
+                        .background(selected ? ESTheme.gold.opacity(0.18) : ESTheme.textPrimary.opacity(0.07))
                         .clipShape(Capsule())
                 }
             }
             .font(.system(size: 13, weight: selected ? .semibold : .medium))
-            .foregroundStyle(.white)
+            .foregroundStyle(selected ? ESTheme.gold : ESTheme.textPrimary.opacity(0.88))
             .padding(.horizontal, 12)
             .frame(height: 43)
-            .background(selected ? ESTheme.accent.opacity(0.72) : Color.clear)
-            .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+            .background(selected ? ESTheme.selection : Color.clear)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(selected ? ESTheme.borderStrong : Color.clear)
+            )
         }
         .buttonStyle(.plain)
     }
@@ -147,7 +151,7 @@ private struct SidebarSubButton: View {
             .padding(.leading, 30)
             .padding(.trailing, 8)
             .frame(height: 29)
-            .foregroundStyle(selected ? ESTheme.gold : .white.opacity(0.78))
+            .foregroundStyle(selected ? ESTheme.gold : ESTheme.textPrimary.opacity(0.72))
         }
         .buttonStyle(.plain)
     }

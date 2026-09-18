@@ -31,7 +31,7 @@ struct AccomplishmentSidebarView: View {
                             }
                         }.padding(.top, 5)
                     } label: {
-                        Label("Categories", systemImage: "folder").foregroundStyle(.white)
+                        Label("Categories", systemImage: "folder").foregroundStyle(ESTheme.textPrimary)
                     }
                     .padding(.horizontal, 13).padding(.vertical, 7)
 
@@ -42,7 +42,7 @@ struct AccomplishmentSidebarView: View {
                             }
                         }.padding(.top, 5)
                     } label: {
-                        Label("Tags", systemImage: "tag").foregroundStyle(.white)
+                        Label("Tags", systemImage: "tag").foregroundStyle(ESTheme.textPrimary)
                     }
                     .padding(.horizontal, 13).padding(.vertical, 7)
                 }
@@ -63,10 +63,14 @@ private struct AccomplishmentSidebarButton: View {
             HStack(spacing: 11) {
                 Image(systemName: symbol).font(.system(size: 16, weight: .medium)).frame(width: 22)
                 Text(title).lineLimit(1); Spacer(minLength: 4)
-                if let count { Text("\(count)").font(.system(size: 11, weight: .bold)).padding(.horizontal, 7).padding(.vertical, 3).background(.white.opacity(selected ? 0.18 : 0.10)).clipShape(Capsule()) }
+                if let count { Text("\(count)").font(.system(size: 11, weight: .bold)).padding(.horizontal, 7).padding(.vertical, 3).background(selected ? ESTheme.gold.opacity(0.18) : ESTheme.textPrimary.opacity(0.07)).clipShape(Capsule()) }
             }
-            .font(.system(size: 13, weight: selected ? .semibold : .medium)).foregroundStyle(.white).padding(.horizontal, 12).frame(height: 43)
-            .background(selected ? ESTheme.accent.opacity(0.72) : Color.clear).clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+            .font(.system(size: 13, weight: selected ? .semibold : .medium))
+            .foregroundStyle(selected ? ESTheme.gold : ESTheme.textPrimary.opacity(0.88))
+            .padding(.horizontal, 12).frame(height: 43)
+            .background(selected ? ESTheme.selection : Color.clear)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(selected ? ESTheme.borderStrong : Color.clear))
         }.buttonStyle(.plain)
     }
 }
@@ -78,7 +82,7 @@ private struct AccomplishmentSidebarSubButton: View {
         Button(action: action) {
             HStack { Text(title).lineLimit(1); Spacer(); Text("\(count)").foregroundStyle(ESTheme.muted) }
                 .font(.system(size: 12, weight: selected ? .semibold : .regular)).padding(.leading, 30).padding(.trailing, 8).frame(height: 29)
-                .foregroundStyle(selected ? ESTheme.gold : .white.opacity(0.78))
+                .foregroundStyle(selected ? ESTheme.gold : ESTheme.textPrimary.opacity(0.72))
         }.buttonStyle(.plain)
     }
 }

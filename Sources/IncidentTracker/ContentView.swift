@@ -48,7 +48,7 @@ struct ContentView: View {
             Divider().overlay(ESTheme.border)
             if mode == .incidents { incidentStatusBar } else { accomplishmentStatusBar }
         }
-        .background(ESTheme.canvas).foregroundStyle(.white)
+        .background(ESTheme.canvasGradient).foregroundStyle(ESTheme.textPrimary)
         .onAppear { repairIncidentSelection(); repairAccomplishmentSelection(); performAutomaticIntake() }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in performAutomaticIntake() }
         .onOpenURL { url in if let record = AccomplishmentIntakeService.ingest(url: url, store: accomplishmentStore) { mode = .accomplishments; accomplishmentSelection = .all; selectedAccomplishmentID = record.id } }
@@ -141,8 +141,8 @@ struct ContentView: View {
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .foregroundStyle(mode == item ? .white : ESTheme.muted)
-                    .background(mode == item ? ESTheme.accent : ESTheme.panelRaised)
+                    .foregroundStyle(mode == item ? ESTheme.onAccent : ESTheme.muted)
+                    .background(mode == item ? ESTheme.gold : ESTheme.panelRaised)
                     .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
                     .accessibilityLabel("Switch to \(item.rawValue)")
                     .accessibilityValue(mode == item ? "Selected" : "Not selected")
@@ -188,8 +188,9 @@ struct ContentView: View {
             } label: {
                 Label(mode == .incidents ? "New Incident" : "New Accomplishment", systemImage: "plus").font(.system(size: 14, weight: .semibold)).padding(.horizontal, 8)
             }.buttonStyle(.borderedProminent).controlSize(.large).tint(ESTheme.accent).keyboardShortcut("n", modifiers: [.command])
+                .shadow(color: ESTheme.gold.opacity(0.12), radius: 12, x: 0, y: 4)
         }
-        .padding(.horizontal, 24).padding(.top, 18).padding(.bottom, 14).background(ESTheme.canvas)
+        .padding(.horizontal, 24).padding(.top, 18).padding(.bottom, 14).background(ESTheme.canvasGradient)
     }
 
     private var incidentBody: some View {
@@ -282,7 +283,7 @@ struct ContentView: View {
 
 private struct StatusMetric: View {
     let symbol: String; let text: String; var gold = false
-    var body: some View { Label { Text(text) } icon: { Image(systemName: symbol).foregroundStyle(gold ? ESTheme.gold : ESTheme.accent) }.foregroundStyle(.white.opacity(0.82)) }
+    var body: some View { Label { Text(text) } icon: { Image(systemName: symbol).foregroundStyle(gold ? ESTheme.gold : ESTheme.goldSoft) }.foregroundStyle(ESTheme.textPrimary.opacity(0.82)) }
 }
 
 struct EmptyIncidentView: View {
