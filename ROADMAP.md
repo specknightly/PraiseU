@@ -79,6 +79,8 @@ Planned capabilities:
 
 ## v2.0.0 — Work Intelligence Assistant
 
+**Status:** Implemented in v2.0.0.
+
 **Goal:** Conversational AI over the complete evidence graph.
 
 - Local conversational interface backed by bounded graph retrieval.

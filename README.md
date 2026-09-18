@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v1.9.1
+# Entropy Shield WorkRecord v2.0.0
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
@@ -177,6 +177,26 @@ A full AppKit/SwiftUI/FoundationModels link build cannot be performed in the gen
 **Document the wins. Preserve the facts. Keep the evidence.**
 
 WorkRecord is the successor to the standalone PraiseU / Accomplishment Tracker experience. The accomplishment workflow is retained and expanded alongside incident tracking, unified work intelligence, evidence handling, review preparation, and local Apple Intelligence analysis.
+## v2.0.0 — Work Intelligence Assistant
+
+WorkRecord now includes a conversational assistant over the complete local evidence system.
+
+- Ask questions across incidents, accomplishments, Work Graph entities, prevention records, operational burden, evidence metadata, and the current role baseline.
+- Retrieval is deterministic and bounded before Apple Intelligence is invoked.
+- **Preview Sources** shows the exact local records selected for the question.
+- Sources can be deselected before the model receives context.
+- Explicit Work Graph relationships and current-record context outrank loose keyword similarity.
+- Every answer is instructed to cite the supplied local records as **[S1]**, **[S2]**, and so on.
+- Answers separate direct support, interpretation, limitations, and useful next questions.
+- Prior conversation is used only for follow-up intent; it is never treated as new evidence.
+- The assistant can be opened globally or anchored to the currently selected incident/accomplishment.
+- Attachment names, hashes, notes, and import metadata can participate in provenance; attachment contents are not silently read.
+- Conversation history is in-memory by default and is not added to the WorkRecord database.
+- Transcript export is explicit and refuses destinations inside Git working trees.
+- Apple Intelligence remains on-device through Foundation Models when supported.
+
+See [RELEASE-v2.0.0.md](RELEASE-v2.0.0.md).
+
 ## v1.9.1 — Modern Dark / Matte-Gold Theme
 
 WorkRecord now uses a dark-only visual system inspired by modern operational and financial dashboards.
