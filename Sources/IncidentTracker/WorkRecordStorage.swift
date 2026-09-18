@@ -37,6 +37,15 @@ enum WorkRecordStorage {
 
     static func prepareRoot(_ root: URL = rootURL) throws {
         let fm = FileManager.default
+        guard !isInsideGitWorkingTree(root) else {
+            throw NSError(
+                domain: "EntropyShieldStorage",
+                code: 10,
+                userInfo: [
+                    NSLocalizedDescriptionKey: "For privacy, the Work Record database cannot be stored inside a Git working tree. Choose a separate local folder such as Application Support."
+                ]
+            )
+        }
         try fm.createDirectory(at: root, withIntermediateDirectories: true)
         try fm.createDirectory(at: root.appendingPathComponent("Evidence", isDirectory: true), withIntermediateDirectories: true)
         try fm.createDirectory(at: root.appendingPathComponent("Backups", isDirectory: true), withIntermediateDirectories: true)
@@ -160,6 +169,23 @@ enum WorkRecordStorage {
     }
 
     static func revealCurrentRoot() { NSWorkspace.shared.activateFileViewerSelecting([rootURL]) }
+
+    static func isInsideGitWorkingTree(_ url: URL) -> Bool {
+        let fm = FileManager.default
+        var current = url.standardizedFileURL
+
+        while true {
+            if fm.fileExists(atPath: current.appendingPathComponent(".git").path) {
+                return true
+            }
+
+            let parent = current.deletingLastPathComponent()
+            if parent.path == current.path { break }
+            current = parent
+        }
+
+        return false
+    }
 
     private static func directoryStats(_ root: URL) -> (files: Int, bytes: Int64) {
         let fm = FileManager.default

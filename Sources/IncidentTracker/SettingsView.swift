@@ -75,6 +75,7 @@ struct SettingsView: View {
 
             Section("Data Guidance") {
                 Text("This is a local professional work record, not a secrets vault. Avoid passwords, authentication tokens, regulated personal data, or information your employer prohibits from being copied locally.").font(.callout).foregroundStyle(.secondary)
+                Text("Your live incident, accomplishment, evidence, relationship, prevention, and burden databases are local data. WorkRecord refuses to place the database inside a Git working tree so application data cannot accidentally become part of the source repository.").font(.callout).foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped).padding().frame(minWidth: 760, minHeight: 600)
@@ -91,6 +92,10 @@ struct SettingsView: View {
         else if chosen.lastPathComponent == "incidents.json" { url = chosen.deletingLastPathComponent() }
         else if chosen.lastPathComponent == "accomplishments.json" { url = chosen.deletingLastPathComponent().deletingLastPathComponent() }
         else { storageStatus = "Choose a Work Record repository folder, incidents.json, or accomplishments.json."; return }
+        guard !WorkRecordStorage.isInsideGitWorkingTree(url) else {
+            storageStatus = "For privacy, choose a Work Record database outside any Git working tree."
+            return
+        }
         let check = WorkRecordStorage.validate(root: url)
         let hasRecognizedDatabase = FileManager.default.fileExists(atPath: url.appendingPathComponent("incidents.json").path) || FileManager.default.fileExists(atPath: url.appendingPathComponent("Accomplishments/accomplishments.json").path)
         guard check.isValid && hasRecognizedDatabase else { storageStatus = hasRecognizedDatabase ? check.message : "No recognized Entropy Shield database was found in that location."; return }
