@@ -1,0 +1,46 @@
+name: Build and package WorkRecord
+
+on:
+  push:
+    branches:
+      - main
+      - release/2.0.0-work-intelligence-assistant
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-package:
+    runs-on: macos-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Verify source-only privacy boundary
+        shell: bash
+        run: bash Scripts/verify-source-only.sh
+
+      - name: Show Swift toolchain
+        run: swift --version
+
+      - name: Parse and build release
+        run: |
+          swift package clean
+          swift build -c release
+
+      - name: Create source ZIP from tracked files
+        shell: bash
+        run: |
+          git archive             --format=zip             --prefix=EntropyShield-WorkRecord-v2.0.0/             HEAD             > EntropyShield-WorkRecord-v2.0.0.zip
+          shasum -a 256 EntropyShield-WorkRecord-v2.0.0.zip > EntropyShield-WorkRecord-v2.0.0.zip.sha256
+
+      - name: Upload v2.0.0 package
+        uses: actions/upload-artifact@v4
+        with:
+          name: EntropyShield-WorkRecord-v2.0.0
+          path: |
+            EntropyShield-WorkRecord-v2.0.0.zip
+            EntropyShield-WorkRecord-v2.0.0.zip.sha256
+          if-no-files-found: error
+          retention-days: 30
