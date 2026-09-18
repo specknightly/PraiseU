@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - release/2.0.0-work-intelligence-assistant
+      - "release/**"
   workflow_dispatch:
 
 permissions:
@@ -32,15 +32,15 @@ jobs:
       - name: Create source ZIP from tracked files
         shell: bash
         run: |
-          git archive             --format=zip             --prefix=EntropyShield-WorkRecord-v2.0.0/             HEAD             > EntropyShield-WorkRecord-v2.0.0.zip
-          shasum -a 256 EntropyShield-WorkRecord-v2.0.0.zip > EntropyShield-WorkRecord-v2.0.0.zip.sha256
+          git archive             --format=zip             --prefix=EntropyShield-WorkRecord-v2.0.1/             HEAD             > EntropyShield-WorkRecord-v2.0.1.zip
+          shasum -a 256 EntropyShield-WorkRecord-v2.0.1.zip > EntropyShield-WorkRecord-v2.0.1.zip.sha256
 
-      - name: Upload v2.0.0 package
+      - name: Upload v2.0.1 package
         uses: actions/upload-artifact@v4
         with:
-          name: EntropyShield-WorkRecord-v2.0.0
+          name: EntropyShield-WorkRecord-v2.0.1
           path: |
-            EntropyShield-WorkRecord-v2.0.0.zip
-            EntropyShield-WorkRecord-v2.0.0.zip.sha256
+            EntropyShield-WorkRecord-v2.0.1.zip
+            EntropyShield-WorkRecord-v2.0.1.zip.sha256
           if-no-files-found: error
           retention-days: 30

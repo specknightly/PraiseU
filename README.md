@@ -1,4 +1,4 @@
-# Entropy Shield WorkRecord v2.0.0
+# Entropy Shield WorkRecord v2.0.1
 
 **IT Career Insurance you didn’t know you needed in the age of AI.**
 
