@@ -11,6 +11,9 @@ struct ContextualRecallView: View {
     @State private var resultLimit = 8
     @State private var selectedIDs: Set<String> = []
     @State private var preview = ""
+    @State private var aiAnalysis = ""
+    @State private var isAnalyzing = false
+    @State private var aiError: String?
 
     private var results: [ContextualRecallResult] {
         ContextualRecallEngine.recall(
@@ -90,6 +93,11 @@ struct ContextualRecallView: View {
                                     .font(.caption).foregroundStyle(ESTheme.muted)
                             }
                             Spacer()
+                            Button("Analyze Selected Context") {
+                                analyzePreview()
+                            }
+                            .disabled(isAnalyzing || !AccomplishmentAIService.isAvailable)
+
                             Button("Copy Context") {
                                 NSPasteboard.general.clearContents()
                                 NSPasteboard.general.setString(preview, forType: .string)
@@ -105,6 +113,38 @@ struct ContextualRecallView: View {
                             .overlay(RoundedRectangle(cornerRadius: 9).stroke(ESTheme.border))
                     }
                     .padding(14).panelBackground()
+
+                    if isAnalyzing {
+                        HStack(spacing: 8) {
+                            ProgressView().controlSize(.small)
+                            Text("Analyzing approved context locally…").font(.caption).foregroundStyle(ESTheme.muted)
+                        }
+                    }
+
+                    if let aiError {
+                        Label(aiError, systemImage: "exclamationmark.triangle")
+                            .font(.caption)
+                            .foregroundStyle(ESTheme.gold)
+                    }
+
+                    if !aiAnalysis.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Context Analysis").font(.system(size: 13, weight: .semibold))
+                                Spacer()
+                                Text("On-device · non-evidentiary").font(.caption).foregroundStyle(ESTheme.muted)
+                            }
+                            TextEditor(text: $aiAnalysis)
+                                .font(.system(size: 13))
+                                .scrollContentBackground(.hidden)
+                                .padding(8)
+                                .frame(minHeight: 220)
+                                .background(ESTheme.field)
+                                .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 9).stroke(ESTheme.border))
+                        }
+                        .padding(14).panelBackground()
+                    }
                 }
             }
         }
@@ -162,6 +202,8 @@ struct ContextualRecallView: View {
     }
 
     private func refreshPreview() {
+        aiAnalysis = ""
+        aiError = nil
         preview = ContextualRecallEngine.contextBundle(
             subject: subject,
             selected: selectedResults,
@@ -169,5 +211,25 @@ struct ContextualRecallView: View {
             accomplishments: accomplishmentStore,
             graph: graphStore
         )
+    }
+
+    private func analyzePreview() {
+        guard !preview.isEmpty, !isAnalyzing else { return }
+        isAnalyzing = true
+        aiError = nil
+        Task {
+            do {
+                let result = try await ContextualRecallAIService.analyze(bundle: preview)
+                await MainActor.run {
+                    aiAnalysis = result
+                    isAnalyzing = false
+                }
+            } catch {
+                await MainActor.run {
+                    aiError = error.localizedDescription
+                    isAnalyzing = false
+                }
+            }
+        }
     }
 }
